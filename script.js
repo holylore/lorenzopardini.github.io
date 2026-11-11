@@ -114,6 +114,7 @@ function parseNote(text) {
       .map((l) => l.trim())
       .find((l) => l
         && !/^https?:/i.test(l)
+        && !/^\[/.test(l)
         && !/^\*/.test(l)
         && !/^Status:/i.test(l)
         && !/^Started/i.test(l)
@@ -190,6 +191,31 @@ function setupFilters() {
   });
 }
 
+// Turns link-only paragraphs into buttons, coloured by platform
+function makeButtons(root) {
+  root.querySelectorAll('p').forEach((p) => {
+    const links = Array.from(p.querySelectorAll('a'));
+    if (!links.length) return;
+
+    // Ignore spaces, middle dots and hyphens used as separators
+    const linkText = links.map((a) => a.textContent).join('').replace(/[·\-\s]/g, '');
+    const allText = p.textContent.replace(/[·\-\s]/g, '');
+    if (linkText !== allText) return; // the paragraph has other text, leave it alone
+
+    const box = document.createElement('div');
+    box.className = 'links';
+    links.forEach((a) => {
+      a.classList.add('btn');
+      const href = a.getAttribute('href') || '';
+      if (/github\.com/i.test(href)) a.classList.add('btn-github');
+      else if (/kaggle\.com/i.test(href)) a.classList.add('btn-kaggle');
+      else a.classList.add('btn-other');
+      box.appendChild(a);
+    });
+    p.replaceWith(box);
+  });
+}
+
 function renderProject(data) {
   const root = document.getElementById('note-content');
   const i = Number(new URLSearchParams(window.location.search).get('p'));
@@ -202,6 +228,7 @@ function renderProject(data) {
     ? `<span class="eyebrow">${STATUS_LABEL[p.group]} · ${escapeHTML(p.statusText)}</span>`
     : '';
   root.innerHTML = `${statusLine}<h1>${escapeHTML(p.title)}</h1>${marked.parse(p.text)}`;
+  makeButtons(root);
   document.title = p.title + ' — Lorenzo Pardini';
 }
 
@@ -222,21 +249,7 @@ function observeReveal() {
   items.forEach((el) => io.observe(el));
 }
 
-// Header hides when you scroll down and comes back when you scroll up
-function setupHeader() {
-  const header = document.querySelector('.site-header');
-  if (!header) return;
-  let lastY = window.scrollY;
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    if (y < 80 || y < lastY) header.classList.remove('hide');
-    else if (y > lastY + 4) header.classList.add('hide');
-    lastY = y;
-  }, { passive: true });
-}
-
 observeReveal();
-setupHeader();
 
 const projectsRoot = document.getElementById('project-groups');
 const noteRoot = document.getElementById('note-content');
