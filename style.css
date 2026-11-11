@@ -137,3 +137,62 @@ p { margin: 0 0 1rem; }
   .pair-right .copy { margin: 2rem 0; }
   .pair-left img { width: 100%; }
 }
+
+/* MOBILE FIXES (screens 860px and narrower) */
+@media (max-width: 860px) {
+  /* Header: compact, menu in one swipeable row instead of wrapping */
+  body { padding-top: 96px; }
+  html { scroll-padding-top: 7rem; }
+  .site-header { height: auto; }
+  .nav-wrap { height: auto; flex-direction: column; align-items: flex-start; gap: 0.4rem; padding: 0.7rem 1.1rem; }
+  .logo { font-size: 1.2rem; }
+  .site-header nav { flex-wrap: nowrap; width: 100%; overflow-x: auto; gap: 1.2rem; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .site-header nav::-webkit-scrollbar { display: none; }
+  .site-header nav a { white-space: nowrap; font-size: 0.9rem; }
+
+  /* Spacing and type sized for a phone */
+  .wrap { padding: 0 1.1rem; }
+  .section { padding: 3.5rem 0; }
+  h1 { font-size: 2.6rem; }
+  h2 { font-size: 2rem; margin-bottom: 1.5rem; }
+  h3 { font-size: 1.4rem; }
+  .group-title { font-size: 1.5rem; margin: 2rem 0 1rem; }
+  .sub-h { margin-top: 2.5rem; font-size: 1.6rem; }
+  .intro { margin-bottom: 2rem; margin-top: -0.5rem; font-size: 0.98rem; }
+
+  /* Hero */
+  .hero { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1.1rem 2.5rem; }
+  .hero-img { aspect-ratio: 4 / 3; }
+  .tagline { font-size: 1rem; margin: 1rem 0 1.5rem; }
+
+  /* Filters and project cards */
+  .filters { gap: 0.5rem; margin-bottom: 1.5rem; }
+  .chip { font-size: 0.88rem; padding: 0.45rem 0.9rem; }
+  .grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .card { padding: 1.2rem; }
+  .card img { aspect-ratio: 4 / 3; }
+  .links { padding-top: 0.8rem; }
+
+  /* Academic timeline: line stays on the left, cards stack beside it */
+  .tl-item { margin-bottom: 2.5rem; }
+  .tl-card { padding: 1.2rem; }
+  .carousel img { height: 240px; }
+
+  /* Personal drivers: photo and text stacked, no offsets */
+  .split { grid-template-columns: 1fr; gap: 1.5rem; margin: 3rem 0; }
+  .split .copy { max-width: none; }
+  .split .offset { margin-top: 0; }
+  .split.flip .media { order: 0; }
+
+  /* Certifications and next steps */
+  .cert-list li { padding: 0.7rem 0; }
+  .next-photo { margin-bottom: 1.5rem; }
+
+  /* Project page */
+  .note { padding: 3rem 1.1rem 2rem; }
+  .note h1 { font-size: 2.2rem; }
+
+  /* Footer */
+  .footer .wrap { flex-direction: column; align-items: flex-start; }
+  .footer a { margin-left: 0; margin-right: 1rem; }
+}
