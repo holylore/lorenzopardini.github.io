@@ -5,154 +5,138 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lorenzo Pardini</title>
   <meta name="description" content="Lorenzo Pardini: AI workflows, quantitative finance projects, academic background, and personal drivers.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-<header class="top">
-  <nav>
-    <a href="#about">Lorenzo Pardini</a>
-    <a href="#about">About me</a>
-    <a href="#projects">Projects</a>
-    <a href="#academic">Academic Background &amp; Experience</a>
-    <a href="#drivers">Personal Drivers</a>
-  </nav>
+<header class="site-header">
+  <div class="wrap nav-wrap">
+    <a class="logo" href="#about">Lorenzo Pardini</a>
+    <nav>
+      <a href="#about">About me</a>
+      <a href="#projects">Projects</a>
+      <a href="#academic">Academic Background &amp; Experience</a>
+      <a href="#drivers">Personal Drivers</a>
+    </nav>
+  </div>
 </header>
 
-<section id="about" class="hero">
-  <div class="hero-text">
-    <h1>Hi, I'm Lorenzo Pardini</h1>
+<main>
+
+<section id="about" class="wrap hero">
+  <div class="reveal">
+    <h1><span>Hi, I'm</span><span>Lorenzo Pardini</span></h1>
     <p class="tagline">BSc Business Administration @UniPi | Building stuff to fail better.</p>
     <p>I hate friction and bureaucracy. That's why I build systems: smooth workflows and durable knowledge.</p>
     <p>When I work, I think about one thing: how is this going to help me in the future? When I have an answer, I move. I make mistakes, I adjust, and I optimize until something useful comes out.</p>
     <p>Check my projects to see what I've been working on during my university years.</p>
-    <p class="contact-line">Let's stay in touch: <a href="https://www.linkedin.com/in/lorenzopardini" target="_blank" rel="noopener">LinkedIn</a></p>
-    <p class="small">
+    <p class="hero-links">Let's stay in touch: <a href="https://www.linkedin.com/in/lorenzopardini" target="_blank" rel="noopener">LinkedIn</a></p>
+    <p class="hero-links small">
       <a href="https://github.com/holylore" target="_blank" rel="noopener">GitHub</a>
       <a href="https://www.kaggle.com/lorenzopardini" target="_blank" rel="noopener">Kaggle</a>
     </p>
   </div>
-  <img src="images/About_Image.jpeg" alt="Lorenzo Pardini in Copenhagen" class="hero-img">
+  <img class="hero-img reveal" src="images/About_Image.jpeg" alt="Lorenzo Pardini in Copenhagen">
 </section>
 
-<section id="projects" class="block">
+<section id="projects" class="section wrap">
   <h2>Projects</h2>
+  <div id="project-groups"><p class="intro">Loading projects…</p></div>
 
-  <div class="grid">
+  <h2 class="sub-h">Next steps</h2>
+  <div id="next-steps" class="prose"></div>
 
-    <article class="card">
-      <img src="images/Notion-CRM_Assistant.png" alt="PreplyCopilot n8n workflow">
-      <span class="tag">AI</span>
-      <h3>PreplyCopilot</h3>
-      <p>A Telegram-to-Notion lesson logger built with n8n. Logs lessons from a voice or text message in seconds.</p>
-      <p class="small">n8n, Telegram API, Notion API, Gemini, JavaScript</p>
-      <a href="https://github.com/holylore/PreplyCopilot-n8n-WorkFlow" target="_blank" rel="noopener">GitHub</a>
-    </article>
-
-    <article class="card">
-      <img src="images/DailyDigest_Workflow.png" alt="DailyDigest n8n workflow">
-      <span class="tag">AI</span>
-      <h3>DailyDigest</h3>
-      <p>A morning news brief from RSS to Telegram. The code selects, the language model only rewrites.</p>
-      <p class="small">n8n, RSS, Mistral, JavaScript</p>
-      <a href="https://github.com/holylore/DailyDigest---a-n8n-WorkFlow" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.kaggle.com/code/lorenzopardini/dailydigest-n8n-workflow" target="_blank" rel="noopener">Kaggle</a>
-    </article>
-
-    <article class="card">
-      <span class="tag">Finance</span>
-      <h3>All-Weather Contrarian Alpha</h3>
-      <p>A Markowitz optimizer with bootstrap confidence intervals.</p>
-      <p class="small">Python, yfinance, Quantitative Finance</p>
-      <a href="https://github.com/holylore/All-Weather-Contrarian-Alpha-Portfolio-Optimizer" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.kaggle.com/code/lorenzopardini/all-weather-contrarian-alpha-portfolio-optimizer" target="_blank" rel="noopener">Kaggle</a>
-    </article>
-
-    <article class="card">
-      <span class="tag">Finance</span>
-      <h3>Portfolio Strategic Analysis</h3>
-      <p>A Core-Satellite investment model in Excel, with a live Tableau layer.</p>
-      <p class="small">Excel, Tableau, Quantitative Finance</p>
-      <a href="https://github.com/holylore/Portfolio-Strategic-Analysis" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.kaggle.com/code/lorenzopardini/strategic-portfolio-analysis-risk-management" target="_blank" rel="noopener">Kaggle</a>
-    </article>
-
-    <article class="card">
-      <img src="images/DifyFail.png" alt="Dify market research workflow">
-      <span class="tag">AI</span>
-      <h3>Multi-Agent AI Workflow</h3>
-      <p class="small"><strong>Early project, retired.</strong></p>
-      <p>Built to test AI orchestration for market research. The market didn't need it, so I stopped.</p>
-      <p class="small">Dify, Gemini, Tavily, Hunter.io</p>
-      <a href="https://github.com/holylore/Multi-Agent-AI-Workflow-for-Business-Intelligence" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.kaggle.com/code/lorenzopardini/multi-agent-ai-workflow-business-intelligence" target="_blank" rel="noopener">Kaggle</a>
-    </article>
-
-  </div>
-
-  <h2 class="sub">Portfolio Analytics</h2>
-  <p class="intro">A live view of the Core-Satellite portfolio: risk metrics, benchmark comparison, and drawdown analysis.</p>
-  <a class="button" href="https://public.tableau.com/app/profile/lorenzo.pardini/vizzes" target="_blank" rel="noopener">View on Tableau Public</a>
+  <h2 class="sub-h">Infrastructure</h2>
+  <div id="infrastructure" class="prose"></div>
 </section>
 
-<section id="academic" class="block">
+<section id="academic" class="section wrap">
   <h2>Academic Background &amp; Experience</h2>
   <p class="intro">From the Versilia beaches to a Dutch classroom to the first build, an ongoing journey.</p>
 
   <ul class="timeline">
-    <li>
-      <span class="date">Nov 2026</span>
-      <h3>Laurea breve in Economia Aziendale</h3>
-      <p class="small">Università di Pisa</p>
-      <p>Graduation date: 3 November 2026.</p>
-      <p>Coursework: Macroeconomics, Statistics, Marketing, Corporate Finance.</p>
-      <img src="images/Graduation-Day.jpeg" alt="Lorenzo on his graduation day, wearing the laurel wreath">
-    </li>
-    <li>
-      <span class="date">Jun to Aug 2026</span>
-      <h3>Commis di Sala</h3>
-      <p class="small">Villa Roma Imperiale · Forte dei Marmi</p>
-      <p>Front-of-house service for international guests under pressure.</p>
-    </li>
-    <li>
-      <span class="date">Apr 2026 to present</span>
-      <h3>Marketing Associate</h3>
-      <p class="small">Starting Finance Club UniPi</p>
-      <p>Educational content about economics and finance, written for students.</p>
-      <div class="carousel">
-        <img src="images/NVIDIA-Frontpage.png" alt="NVIDIA history explainer: front page">
-        <img src="images/NVIDIA-Slide1.png" alt="NVIDIA history explainer: slide 1">
-        <img src="images/NVIDIA-Slide2.png" alt="NVIDIA history explainer: slide 2">
-        <img src="images/NVIDIA-Slide3.png" alt="NVIDIA history explainer: slide 3">
-        <img src="images/NVIDIA-Slide4.png" alt="NVIDIA history explainer: slide 4">
-        <img src="images/NVIDIA-Slide5.png" alt="NVIDIA history explainer: slide 5">
-        <img src="images/NVIDIA-Lastpage.png" alt="NVIDIA history explainer: last page">
+
+    <li class="tl-item right reveal">
+      <div class="tl-card">
+        <span class="eyebrow">Nov 2026</span>
+        <h3>Laurea breve in Economia Aziendale</h3>
+        <p class="small">Università di Pisa</p>
+        <p>Graduation date: 3 November 2026.</p>
+        <p>Coursework: Macroeconomics, Statistics, Marketing, Corporate Finance.</p>
+        <img src="images/Graduation-Day.jpeg" alt="Lorenzo on his graduation day, wearing the laurel wreath">
       </div>
-      <p class="small">Weekly explainers on NVIDIA's history, written for students.</p>
+      <span class="tl-dot"></span>
     </li>
-    <li>
-      <span class="date">Feb to Jul 2025</span>
-      <h3>Erasmus+ · International Finance and Control</h3>
-      <p class="small">Fontys Venlo University of Applied Sciences</p>
-      <p>Coursework: Data Analytics, Advanced Statistics, Controlling and Cost Accounting.</p>
-      <img src="images/Erasmus_Photo.jpeg" alt="Lorenzo with roommates during his Erasmus exchange at Fontys">
-      <p class="small">me and my roommates, sorry I could not find a more serious photo :)</p>
+
+    <li class="tl-item left reveal">
+      <div class="tl-card">
+        <span class="eyebrow">Jun to Aug 2026</span>
+        <h3>Commis di Sala</h3>
+        <p class="small">Villa Roma Imperiale · Forte dei Marmi</p>
+        <p>Front-of-house service for international guests under pressure.</p>
+      </div>
+      <span class="tl-dot"></span>
     </li>
-    <li>
-      <span class="date">Apr to Nov 2024</span>
-      <h3>Commis di Sala</h3>
-      <p class="small">Principino · Viareggio</p>
-      <p>Large-scale events up to 500 guests; promoted mid-contract.</p>
+
+    <li class="tl-item right reveal">
+      <div class="tl-card">
+        <span class="eyebrow">Apr 2026 to present</span>
+        <h3>Marketing Associate</h3>
+        <p class="small">Starting Finance Club UniPi</p>
+        <p>Educational content about economics and finance, written for students.</p>
+        <div class="carousel">
+          <img src="images/NVIDIA-Frontpage.png" alt="NVIDIA history explainer: front page">
+          <img src="images/NVIDIA-Slide1.png" alt="NVIDIA history explainer: slide 1">
+          <img src="images/NVIDIA-Slide2.png" alt="NVIDIA history explainer: slide 2">
+          <img src="images/NVIDIA-Slide3.png" alt="NVIDIA history explainer: slide 3">
+          <img src="images/NVIDIA-Slide4.png" alt="NVIDIA history explainer: slide 4">
+          <img src="images/NVIDIA-Slide5.png" alt="NVIDIA history explainer: slide 5">
+          <img src="images/NVIDIA-Lastpage.png" alt="NVIDIA history explainer: last page">
+        </div>
+        <p class="small">Weekly explainers on NVIDIA's history, written for students.</p>
+      </div>
+      <span class="tl-dot"></span>
     </li>
-    <li>
-      <span class="date">2022 to 2023</span>
-      <h3>Commis di Sala</h3>
-      <p class="small">Bagno Orizzonte · Lido di Camaiore</p>
-      <p>Beach hospitality across two seasons, funding my studies.</p>
+
+    <li class="tl-item left reveal">
+      <div class="tl-card">
+        <span class="eyebrow">Feb to Jul 2025</span>
+        <h3>Erasmus+ · International Finance and Control</h3>
+        <p class="small">Fontys Venlo University of Applied Sciences</p>
+        <p>Coursework: Data Analytics, Advanced Statistics, Controlling and Cost Accounting.</p>
+        <img src="images/Erasmus_Photo.jpeg" alt="Lorenzo with roommates during his Erasmus exchange at Fontys">
+        <p class="small">me and my roommates, sorry I could not find a more serious photo :)</p>
+      </div>
+      <span class="tl-dot"></span>
     </li>
+
+    <li class="tl-item right reveal">
+      <div class="tl-card">
+        <span class="eyebrow">Apr to Nov 2024</span>
+        <h3>Commis di Sala</h3>
+        <p class="small">Principino · Viareggio</p>
+        <p>Large-scale events up to 500 guests; promoted mid-contract.</p>
+      </div>
+      <span class="tl-dot"></span>
+    </li>
+
+    <li class="tl-item left reveal">
+      <div class="tl-card">
+        <span class="eyebrow">2022 to 2023</span>
+        <h3>Commis di Sala</h3>
+        <p class="small">Bagno Orizzonte · Lido di Camaiore</p>
+        <p>Beach hospitality across two seasons, funding my studies.</p>
+      </div>
+      <span class="tl-dot"></span>
+    </li>
+
   </ul>
 
-  <h3>Certifications</h3>
+  <h3 class="sub-h">Certifications</h3>
   <ul class="plain">
     <li>IELTS C1, British Council, Nov 2026</li>
     <li>AI Elements: Introduction to AI, University of Helsinki, Oct 2026</li>
@@ -160,26 +144,30 @@
   </ul>
 </section>
 
-<section id="drivers" class="block">
+<section id="drivers" class="section wrap">
   <h2>Personal Drivers: What shapes my approach?</h2>
   <p class="intro">Three things shaped how I work. None of them are jobs.</p>
 
-  <div class="split">
-    <div>
-      <span class="tag">15 years of competitive swimming</span>
+  <div class="split reveal">
+    <div class="copy">
+      <span class="eyebrow">15 years of competitive swimming</span>
       <h3>Shaping a Performance Mindset</h3>
       <p>Spent 15 years staring at the black line on the bottom of a pool.</p>
       <p>Raw discipline and consistency: no shortcuts, you show up or the clock proves you didn't.</p>
       <p>Ability to execute under physical and mental fatigue.</p>
       <p>Long-term commitment: complex results are just the accumulation of small, daily repetitions.</p>
     </div>
-    <img src="images/Swimming_Photo.jpeg" alt="Lorenzo at a swimming start block">
+    <div class="media offset">
+      <img src="images/Swimming_Photo.jpeg" alt="Lorenzo at a swimming start block">
+    </div>
   </div>
 
-  <div class="split">
-    <img src="images/Chess_Photo.jpeg" alt="Lorenzo playing chess">
-    <div>
-      <span class="tag">About 10 years of chess</span>
+  <div class="split flip reveal">
+    <div class="media">
+      <img src="images/Chess_Photo.jpeg" alt="Lorenzo playing chess">
+    </div>
+    <div class="copy">
+      <span class="eyebrow">About 10 years of chess</span>
       <h3>Developing Strategic Patience</h3>
       <p>Playing chess for about a decade.</p>
       <p>Pattern recognition and catching small details before they become a problem.</p>
@@ -187,29 +175,35 @@
     </div>
   </div>
 
-  <div class="split">
-    <div>
-      <span class="tag">Curious mindset</span>
+  <div class="split flip reveal">
+    <div class="media stack offset">
+      <img src="images/Taiwan-Travel_Photo.jpeg" alt="Lorenzo at a lantern wall while traveling in Taiwan">
+      <img src="images/Pei_Photo.jpeg" alt="Lorenzo and a friend in a selfie">
+    </div>
+    <div class="copy">
+      <span class="eyebrow">Curious mindset</span>
       <h3>Expanding a Global Perspective</h3>
       <p>Moving out for my Erasmus in the Netherlands, plus traveling through places like Taiwan and Thailand.</p>
       <p>Adapting quickly to new environments and feeling comfortable outside my comfort zone.</p>
       <p>Realizing there is rarely just one way to approach a problem.</p>
     </div>
-    <div class="stack">
-      <img src="images/Taiwan-Travel_Photo.jpeg" alt="Lorenzo at a lantern wall while traveling in Taiwan">
-      <img src="images/Pei_Photo.jpeg" alt="Lorenzo and a friend in a selfie">
-    </div>
   </div>
 </section>
 
+</main>
+
 <footer class="footer">
-  <span>Lorenzo Pardini © 2026</span>
-  <span>
-    <a href="https://www.linkedin.com/in/lorenzopardini" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="https://github.com/holylore" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://www.kaggle.com/lorenzopardini" target="_blank" rel="noopener">Kaggle</a>
-  </span>
+  <div class="wrap">
+    <span>Lorenzo Pardini © 2026</span>
+    <span>
+      <a href="https://www.linkedin.com/in/lorenzopardini" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/holylore" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.kaggle.com/lorenzopardini" target="_blank" rel="noopener">Kaggle</a>
+    </span>
+  </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
