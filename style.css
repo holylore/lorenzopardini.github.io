@@ -137,3 +137,25 @@ p { margin: 0 0 1rem; }
   .pair { grid-template-columns: 1fr; }
   .pair img:nth-child(2) { margin-top: 0; }
 }
+/* Curious mindset: lantern left, text and Pei photo right (Lovable layout) */
+.pair-block { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; max-width: 1000px; margin: 6rem 0; }
+.pair-left img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 14px; margin-top: 2rem; }
+.pair-right .copy { max-width: 460px; margin-bottom: 3rem; }
+.pair-right > img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; }
+
+@media (max-width: 860px) {
+  .pair-block { grid-template-columns: 1fr; }
+  .pair-left img { margin-top: 0; }
+}
+
+/* Header: always visible, fixed at the top */
+body { padding-top: 64px; }
+.site-header, .site-header.hide { position: fixed; top: 0; left: 0; right: 0; transform: none !important; }
+
+/* Certifications: links under each entry */
+.cert-list li { line-height: 1.6; }
+.cert-links { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.4rem; }
+.cert-links a { color: var(--accent); font-size: 0.92rem; }
+
+/* Next steps photo */
+.next-photo { width: 100%; max-width: 760px; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; margin: 0 0 2.5rem; }
