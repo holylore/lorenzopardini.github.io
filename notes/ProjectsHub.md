@@ -7,10 +7,7 @@ The ambitious desire is to overperform the major global indexes (MSCI world) ove
 - **Excel financial modeling:**
   *Started 10/2025 - Last Modified April 04/2026*
    
-   https://github.com/holylore/Portfolio-Strategic-Analysis
-   
-   https://www.kaggle.com/code/lorenzopardini/strategic-portfolio-analysis-risk-management
-   
+   [GithHub Repo](https://github.com/holylore/Portfolio-Strategic-Analysis) -  [Kaggle Notebook](https://www.kaggle.com/code/lorenzopardini/strategic-portfolio-analysis-risk-management) 
   Portfolio analysis in Excel: Sharpe ratio, Pearson correlation, benchmark comparison. 
   
   Status: live (the base model).
@@ -20,9 +17,7 @@ The ambitious desire is to overperform the major global indexes (MSCI world) ove
 - **Google Colab Python:** 
   *Started: 04/2026 - Last Modified: June 2026*
   
-  https://github.com/holylore/All-Weather-Contrarian-Alpha-Portfolio-Optimizer
-  
-  https://www.kaggle.com/code/lorenzopardini/all-weather-contrarian-alpha-portfolio-optimizer
+  [GitHub Repo](https://github.com/holylore/All-Weather-Contrarian-Alpha-Portfolio-Optimizer) - [Kaggle Notebook](https://www.kaggle.com/code/lorenzopardini/all-weather-contrarian-alpha-portfolio-optimizer)
   
   Markowitz mean-variance portfolio optimization, built with AI-assisted coding. 
   
@@ -49,10 +44,7 @@ The goal of the newsletter I created is filtering the noise, creating a unified 
 - **Daily newsletter (DailyDigest):** 
   *Started: 09/2026 - Last Modified: 10/2026*
   
-  https://github.com/holylore/DailyDigest---a-n8n-WorkFlow)
-  
-   
-  https://www.kaggle.com/code/lorenzopardini/dailydigest-n8n-workflow
+  [GitHub Repo](https://github.com/holylore/DailyDigest---a-n8n-WorkFlow) - [Kaggle Notebook](https://www.kaggle.com/code/lorenzopardini/dailydigest-n8n-workflow)
   
   Started 
   Collects RSS feeds, filters and summarizes them with Mistral (free tier API key connection), and sends one brief to Telegram each morning. 
@@ -68,7 +60,7 @@ The goal was to minimize the time dedicated to this process, making it easier an
 - **PreplyCopilot, CRM for Pei:** 
   *Started: 09/2026 - Last Modified: 10/2026*
   
-  https://github.com/holylore/PreplyCopilot-n8n-WorkFlow
+  [GitHub Repo](https://github.com/holylore/PreplyCopilot-n8n-WorkFlow)
   
   n8n workflow to manage data entry for new students and lessons for every student. 
   The workflow was built on top of a pre existing Notion CRM that Pei (my girlfriend and the client in this case) built. I perfected the Notion CRM to make n8n work with it smoothly. 
@@ -128,9 +120,7 @@ The goal was to automate the first layer of research for companies and uncover p
 - **Dify workflows:** 
   *Started: 04/2026 - Last Modified: 06/2026*
   
-  https://github.com/holylore/Multi-Agent-AI-Workflow-for-Business-Intelligence
-  
-  https://www.kaggle.com/code/lorenzopardini/multi-agent-ai-workflow-business-intelligence
+  [GitHub Repo](https://github.com/holylore/Multi-Agent-AI-Workflow-for-Business-Intelligence) -  [Kaggle Notebook](https://www.kaggle.com/code/lorenzopardini/multi-agent-ai-workflow-business-intelligence)
   
   Two-step company analysis prototype. Commercial attempt failed; kept as a portfolio demonstration, not a business. 
   
