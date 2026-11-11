@@ -210,3 +210,10 @@ p { margin: 0 0 1rem; }
 /* Curious mindset: lantern sits beside Pei's photo, lower than the text */
 .pair-block { grid-template-rows: auto auto; }
 .pair-left { grid-column: 1; grid-row: 2; align-self: start; margin-top: 4rem; }
+
+/* Curious mindset, final: lantern top left, text top right, Pei's photo bottom left */
+.pair-block { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 3rem 3rem; align-items: start; }
+.pair-left { grid-column: 1; grid-row: 1; justify-self: start; align-self: start; margin-top: 0; }
+.pair-left img { width: 88%; aspect-ratio: 4 / 5; margin: 0; }
+.pair-right .copy { grid-column: 2; grid-row: 1; align-self: start; margin: 0; max-width: 460px; }
+.pair-right > img { grid-column: 1; grid-row: 2; width: 88%; aspect-ratio: 4 / 3; justify-self: start; margin: 3rem 0 0; }
