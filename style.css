@@ -206,3 +206,7 @@ p { margin: 0 0 1rem; }
 
 .note .btn-other { color: var(--ink); border-color: var(--line); background: transparent; }
 .note .btn-other:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* Curious mindset: lantern sits beside Pei's photo, lower than the text */
+.pair-block { grid-template-rows: auto auto; }
+.pair-left { grid-column: 1; grid-row: 2; align-self: start; margin-top: 4rem; }
