@@ -1,6 +1,6 @@
 const NOTE_URL = 'notes/ProjectsHub.md';
 
-// Image shown on each card, matched by project name
+// Card image, matched on the title as written in Obsidian
 const IMAGE_FOR = [
   [/Excel financial modeling/i, 'images/Tableau-viz.png'],
   [/Google Colab Python/i, 'images/all-weather_optimizer.png'],
@@ -8,6 +8,13 @@ const IMAGE_FOR = [
   [/DailyDigest/i, 'images/DailyDigest_Workflow.png'],
   [/PreplyCopilot/i, 'images/Notion-CRM_Assistant.png'],
   [/Dify/i, 'images/DifyFail.png'],
+];
+
+// Names shown on the site. The Obsidian titles stay as they are.
+const DISPLAY_NAME = [
+  [/^Excel financial modeling/i, 'Strategic Portfolio Analysis'],
+  [/^Google Colab Python/i, 'All-Weather Contrarian Optimizer'],
+  [/^PreplyCopilot, CRM for Pei/i, 'PreplyCopilot, CRM for Pei (my GF)'],
 ];
 
 const STATUS_LABEL = { live: 'Live', progress: 'In progress', dropped: 'Dropped' };
@@ -24,7 +31,14 @@ function escapeHTML(s) {
   }[c]));
 }
 
-// Decides the group from the Status line written in Obsidian
+// Filter category, decided from the project title
+function categoryOf(raw) {
+  if (/excel|colab|financecopilot/i.test(raw)) return 'Finance';
+  if (/chess/i.test(raw)) return 'Data';
+  return 'AI & Automation';
+}
+
+// Group, decided from the Status line written in Obsidian
 function classify(statusText) {
   const s = (statusText || '').toLowerCase();
   if (/dropped|abandon|retired/.test(s)) return 'dropped';
@@ -78,7 +92,7 @@ function parseNote(text) {
       continue;
     }
 
-    // "Goal - ..." and "Purpose - ..." start the text of the next project
+    // "Goal -" and "Purpose -" lines start the text of the next project
     if (/^(Goal|Purpose)\s*-/i.test(line.trim())) {
       flush();
       pending.push(line);
@@ -104,8 +118,13 @@ function parseNote(text) {
         && !/^Status:/i.test(l)
         && !/^Started/i.test(l)
         && !/^(Goal|Purpose)/i.test(l)) || '';
-    const img = IMAGE_FOR.find(([re]) => re.test(p.title));
+
+    const raw = p.title;
+    const img = IMAGE_FOR.find(([re]) => re.test(raw));
     p.image = img ? img[1] : '';
+    p.category = categoryOf(raw);
+    const name = DISPLAY_NAME.find(([re]) => re.test(raw));
+    p.title = name ? name[1] : raw;
   });
 
   return {
@@ -123,16 +142,16 @@ function renderIndex(data) {
     const items = data.projects.filter((p) => p.group === key);
     if (!items.length) return;
 
-    const heading = document.createElement('h3');
-    heading.className = 'group-title';
-    heading.textContent = label;
-    root.appendChild(heading);
+    const section = document.createElement('div');
+    section.className = 'group';
+    section.innerHTML = `<h3 class="group-title">${label}</h3>`;
 
     const grid = document.createElement('div');
     grid.className = 'grid';
     items.forEach((p) => {
       const card = document.createElement('article');
       card.className = 'card reveal';
+      card.dataset.cat = p.category;
       card.innerHTML = `
         ${p.image ? `<img src="${p.image}" alt="${escapeHTML(p.title)}">` : ''}
         <span class="eyebrow">${STATUS_LABEL[p.group]}</span>
@@ -143,11 +162,32 @@ function renderIndex(data) {
         </div>`;
       grid.appendChild(card);
     });
-    root.appendChild(grid);
+    section.appendChild(grid);
+    root.appendChild(section);
   });
 
   document.getElementById('next-steps').innerHTML = marked.parse(data.nextText);
   document.getElementById('infrastructure').innerHTML = marked.parse(data.infraText);
+}
+
+// Filter buttons: All, Finance, AI & Automation, Data
+function setupFilters() {
+  const buttons = document.querySelectorAll('[data-filter]');
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      buttons.forEach((b) => b.classList.toggle('active', b === btn));
+      const choice = btn.dataset.filter;
+
+      document.querySelectorAll('#project-groups .card').forEach((card) => {
+        card.hidden = !(choice === 'All' || card.dataset.cat === choice);
+      });
+
+      // Hide a group heading when none of its cards are visible
+      document.querySelectorAll('#project-groups .group').forEach((group) => {
+        group.hidden = group.querySelectorAll('.card:not([hidden])').length === 0;
+      });
+    });
+  });
 }
 
 function renderProject(data) {
@@ -182,7 +222,21 @@ function observeReveal() {
   items.forEach((el) => io.observe(el));
 }
 
+// Header hides when you scroll down and comes back when you scroll up
+function setupHeader() {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y < 80 || y < lastY) header.classList.remove('hide');
+    else if (y > lastY + 4) header.classList.add('hide');
+    lastY = y;
+  }, { passive: true });
+}
+
 observeReveal();
+setupHeader();
 
 const projectsRoot = document.getElementById('project-groups');
 const noteRoot = document.getElementById('note-content');
@@ -195,7 +249,10 @@ if (projectsRoot || noteRoot) {
     })
     .then((text) => {
       const data = parseNote(text);
-      if (projectsRoot) renderIndex(data);
+      if (projectsRoot) {
+        renderIndex(data);
+        setupFilters();
+      }
       if (noteRoot) renderProject(data);
       observeReveal();
     })

@@ -111,3 +111,29 @@ p { margin: 0 0 1rem; }
   .tl-item.left .tl-card, .tl-item.right .tl-card { grid-column: 2; }
   .site-header nav { gap: 1rem; }
 }
+/* Fixes */
+[hidden] { display: none !important; }
+
+/* Keeps the academic intro text on one line */
+.intro { max-width: none; }
+
+/* Filter buttons */
+.filters { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0 0 2.5rem; }
+.chip { font: inherit; font-size: 0.95rem; padding: 0.5rem 1.1rem; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; transition: background 0.2s, color 0.2s; }
+.chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* Curious mindset: lantern left, Pei right, Pei sits lower */
+.pair-block { max-width: 1000px; margin: 6rem 0; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; margin-bottom: 3rem; }
+.pair img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 14px; }
+.pair img:nth-child(2) { margin-top: 6rem; }
+.pair-block .copy { max-width: 560px; }
+
+/* Header slides away when you scroll down and returns when you scroll up */
+.site-header { transition: transform 0.35s ease; }
+.site-header.hide { transform: translateY(-100%); }
+
+@media (max-width: 860px) {
+  .pair { grid-template-columns: 1fr; }
+  .pair img:nth-child(2) { margin-top: 0; }
+}
