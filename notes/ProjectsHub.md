@@ -6,13 +6,14 @@ The ambitious desire is to overperform the major global indexes (MSCI world) ove
 
 - **Excel financial modeling:**
   *Started 10/2025 - Last Modified April 04/2026*
-   
-   [GithHub Repo](https://github.com/holylore/Portfolio-Strategic-Analysis) -  [Kaggle Notebook](https://www.kaggle.com/code/lorenzopardini/strategic-portfolio-analysis-risk-management) 
-  Portfolio analysis in Excel: Sharpe ratio, Pearson correlation, benchmark comparison. 
-  
+
+  [GitHub Repo](https://github.com/holylore/Portfolio-Strategic-Analysis) - [Kaggle Notebook](https://www.kaggle.com/code/lorenzopardini/strategic-portfolio-analysis-risk-management)
+
+  Portfolio analysis in Excel: Sharpe ratio, Pearson correlation, benchmark comparison.
+
   Status: live (the base model).
-  
-  What I learned: financial modeling through Excel and Google Sheets, the importance of writing down everything and keeping track of core things, the importance of data and context, to filter signal from noise. 
+
+  What I learned: financial modeling through Excel and Google Sheets, the importance of writing down everything and keeping track of core things, the importance of data and context, to filter signal from noise.
   
 - **Google Colab Python:** 
   *Started: 04/2026 - Last Modified: June 2026*
