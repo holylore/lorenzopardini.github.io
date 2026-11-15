@@ -1,5 +1,5 @@
 /* =========================================================
-   1. BASE: colours, fonts, global rules
+   1. BASE
    ========================================================= */
 :root {
   --bg: #efede9;
@@ -51,7 +51,7 @@ p { margin: 0 0 1rem; }
 .site-header nav a:hover { color: var(--ink); border-color: var(--accent); }
 
 /* =========================================================
-   3. HERO (top of the home page)
+   3. HERO
    ========================================================= */
 .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; align-items: center; padding: 6rem 1.5rem 4rem; max-width: 1180px; margin: 0 auto; }
 .tagline { font-size: 1.1rem; color: var(--muted); margin: 1.5rem 0 2rem; }
@@ -61,7 +61,17 @@ p { margin: 0 0 1rem; }
 .hero-img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 14px; }
 
 /* =========================================================
-   4. BUTTONS AND FILTERS
+   4. OFFER SECTION ("Have an issue?")
+   ========================================================= */
+.offer { padding-top: 5rem; padding-bottom: 3rem; }
+.offer h2 { margin-bottom: 0.5rem; }
+.offer .intro { margin-bottom: 2rem; }
+.offer-list li { padding: 0.8rem 0; border-bottom: 1px solid var(--line); line-height: 1.6; }
+.offer-contact { margin: 1.5rem 0 0; }
+.offer-contact a { color: var(--accent); margin-left: 1rem; }
+
+/* =========================================================
+   5. BUTTONS AND FILTERS
    ========================================================= */
 .btn { display: inline-block; font-size: 0.88rem; text-decoration: none; border: 1px solid var(--ink); border-radius: 999px; padding: 0.4rem 1rem; transition: background 0.2s, color 0.2s; }
 .btn:hover { background: var(--ink); color: var(--bg); }
@@ -72,16 +82,63 @@ p { margin: 0 0 1rem; }
 .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
 /* =========================================================
-   5. PROJECT CARDS (home page)
+   6. PROJECT CAROUSEL (one card at a time, one group per carousel)
    ========================================================= */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.5rem; display: flex; flex-direction: column; transition: transform 0.3s, border-color 0.3s; }
-.card:hover { transform: translateY(-4px); border-color: var(--accent); }
+.carousel { position: relative; }
+
+.track {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0.5rem 0 1.5rem;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.track::-webkit-scrollbar { display: none; }
+
+/* Each slide takes most of the width, so the next one peeks in at the edge */
+.slide { flex: 0 0 88%; max-width: 900px; scroll-snap-align: start; }
+.slide .card { height: 100%; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.5rem; display: flex; flex-direction: column; }
 .card img { width: 100%; aspect-ratio: 16 / 10; object-fit: contain; background: #1d1d21; border-radius: 10px; margin-bottom: 1rem; }
 .links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; padding-top: 1rem; }
 
+/* Navigation: arrows and dots */
+.carousel-nav { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem; }
+
+.nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s;
+}
+.nav-btn:hover { transform: scale(1.06); }
+.nav-btn:disabled { opacity: 0.3; cursor: default; transform: none; }
+.nav-btn svg { width: 16px; height: 16px; fill: none; stroke: #000; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+.dots { display: flex; align-items: center; gap: 0.6rem; }
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  background: #fff;
+  padding: 0;
+  cursor: pointer;
+}
+.dot.active { background: #000; }
+
 /* =========================================================
-   6. ACADEMIC TIMELINE
+   7. ACADEMIC TIMELINE
    ========================================================= */
 .timeline { list-style: none; padding: 0; margin: 0; position: relative; }
 .timeline::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #cbbfb2; transform: translateX(-50%); z-index: 0; }
@@ -91,11 +148,11 @@ p { margin: 0 0 1rem; }
 .tl-card img { width: 100%; border-radius: 10px; margin-top: 1rem; }
 .tl-item.left .tl-card { grid-column: 1; }
 .tl-item.right .tl-card { grid-column: 3; }
-.carousel { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.5rem 0 1rem; margin-top: 1rem; }
-.carousel img { flex: 0 0 auto; height: 320px; width: auto; border-radius: 10px; border: 1px solid var(--line); background: #fff; scroll-snap-align: start; margin: 0; }
+.carousel-photos { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.5rem 0 1rem; margin-top: 1rem; }
+.carousel-photos img { flex: 0 0 auto; height: 320px; width: auto; border-radius: 10px; border: 1px solid var(--line); background: #fff; scroll-snap-align: start; margin: 0; }
 
 /* =========================================================
-   7. CERTIFICATIONS AND NEXT STEPS
+   8. CERTIFICATIONS AND NEXT STEPS
    ========================================================= */
 .plain { list-style: none; padding: 0; }
 .cert-list li { padding: 0.8rem 0; border-bottom: 1px solid var(--line); line-height: 1.6; }
@@ -104,22 +161,20 @@ p { margin: 0 0 1rem; }
 .next-photo { width: 100%; max-width: 760px; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; margin: 0 0 2.5rem; }
 
 /* =========================================================
-   8. CURIOUS MINDSET BLOCK (Personal Drivers)
+   9. CURIOUS MINDSET BLOCK
    Lantern photo: top left, spans both rows
    Text: top right
    Pei's photo: below the text, on the right
    ========================================================= */
 .pair-block { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 3rem; align-items: start; max-width: 1000px; margin: 6rem 0; }
 .pair-right { display: contents; }
-
 .pair-left { grid-column: 1; grid-row: 1 / span 2; align-self: start; }
 .pair-left img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 14px; margin: 0; }
-
 .pair-right .copy { grid-column: 2; grid-row: 1; align-self: start; max-width: 460px; margin: 0; }
 .pair-right > img { grid-column: 2; grid-row: 2; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; margin: 2.5rem 0 0; }
 
 /* =========================================================
-   9. PERSONAL DRIVERS (other blocks)
+   10. PERSONAL DRIVERS (other blocks)
    ========================================================= */
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin: 6rem 0; }
 .split .copy { max-width: 480px; }
@@ -130,7 +185,7 @@ p { margin: 0 0 1rem; }
 .stack img { aspect-ratio: 4 / 3; }
 
 /* =========================================================
-   10. PROJECT PAGE (project.html)
+   11. PROJECT PAGE (project.html)
    ========================================================= */
 .note { max-width: 760px; margin: 0 auto; padding: 5rem 1.5rem 2rem; }
 .note h1 { font-size: 3.2rem; margin-bottom: 1.5rem; }
@@ -149,27 +204,25 @@ p { margin: 0 0 1rem; }
 .back { display: inline-block; margin-bottom: 2rem; color: var(--muted); text-decoration: none; }
 
 /* =========================================================
-   11. FOOTER
+   12. FOOTER
    ========================================================= */
 .footer { border-top: 1px solid var(--line); padding: 2.5rem 0; margin-top: 2rem; }
 .footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
 .footer a { margin-left: 1rem; color: var(--muted); }
 
 /* =========================================================
-   12. MOBILE (screens 860px and narrower)
+   13. MOBILE (screens 860px and narrower)
    ========================================================= */
 @media (max-width: 860px) {
   body { padding-top: 96px; }
   html { scroll-padding-top: 7rem; }
 
-  /* Header: compact, menu in one swipeable row */
   .nav-wrap { height: auto; flex-direction: column; align-items: flex-start; gap: 0.4rem; padding: 0.7rem 1.1rem; }
   .logo { font-size: 1.2rem; }
   .site-header nav { flex-wrap: nowrap; width: 100%; overflow-x: auto; gap: 1.2rem; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .site-header nav::-webkit-scrollbar { display: none; }
   .site-header nav a { white-space: nowrap; font-size: 0.9rem; }
 
-  /* Spacing and type */
   .wrap { padding: 0 1.1rem; }
   .section { padding: 3.5rem 0; }
   h1 { font-size: 2.6rem; }
@@ -179,25 +232,22 @@ p { margin: 0 0 1rem; }
   .sub-h { margin-top: 2.5rem; font-size: 1.6rem; }
   .intro { margin-bottom: 2rem; margin-top: -0.5rem; font-size: 0.98rem; }
 
-  /* Hero */
   .hero { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1.1rem 2.5rem; }
   .hero-img { aspect-ratio: 4 / 3; }
   .tagline { font-size: 1rem; margin: 1rem 0 1.5rem; }
 
-  /* Filters and cards */
+  .offer { padding-top: 3.5rem; padding-bottom: 2rem; }
+
   .filters { gap: 0.5rem; margin-bottom: 1.5rem; }
   .chip { font-size: 0.88rem; padding: 0.45rem 0.9rem; }
-  .grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .slide { flex-basis: 92%; }
   .card { padding: 1.2rem; }
   .card img { aspect-ratio: 4 / 3; }
-  .links { padding-top: 0.8rem; }
 
-  /* Timeline: line stays on the left, cards beside it */
   .tl-item { margin-bottom: 2.5rem; }
   .tl-card { padding: 1.2rem; }
-  .carousel img { height: 240px; }
+  .carousel-photos img { height: 240px; }
 
-  /* Personal drivers: everything stacked, no offsets */
   .split { grid-template-columns: 1fr; gap: 1.5rem; margin: 3rem 0; }
   .split .copy { max-width: none; }
   .split .offset { margin-top: 0; }
@@ -209,15 +259,12 @@ p { margin: 0 0 1rem; }
   .pair-right .copy { margin: 0 0 1.5rem; max-width: none; }
   .pair-right > img { margin: 0; }
 
-  /* Certifications and next steps */
   .cert-list li { padding: 0.7rem 0; }
   .next-photo { margin-bottom: 1.5rem; }
 
-  /* Project page */
   .note { padding: 3rem 1.1rem 2rem; }
   .note h1 { font-size: 2.2rem; }
 
-  /* Footer */
   .footer .wrap { flex-direction: column; align-items: flex-start; }
   .footer a { margin-left: 0; margin-right: 1rem; }
 }

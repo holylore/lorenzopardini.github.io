@@ -31,6 +31,12 @@ function escapeHTML(s) {
   }[c]));
 }
 
+function el(tag, className) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  return node;
+}
+
 // Filter category, decided from the project title
 function categoryOf(raw) {
   if (/excel|colab|financecopilot/i.test(raw)) return 'Finance';
@@ -135,6 +141,101 @@ function parseNote(text) {
   };
 }
 
+// One carousel per group: slides, arrows and dots
+function buildCarousel(items) {
+  const carousel = el('div', 'carousel');
+  const track = el('div', 'track');
+
+  items.forEach((p) => {
+    const slide = el('div', 'slide');
+    slide.dataset.cat = p.category;
+
+    const card = el('article', 'card reveal');
+    card.innerHTML = `
+      ${p.image ? `<img src="${p.image}" alt="${escapeHTML(p.title)}">` : ''}
+      <span class="eyebrow">${STATUS_LABEL[p.group]}</span>
+      <h3>${escapeHTML(p.title)}</h3>
+      <p>${escapeHTML(p.summary)}</p>
+      <div class="links">
+        <a class="btn primary" href="project.html?p=${p.index}">Read more</a>
+      </div>`;
+    slide.appendChild(card);
+    track.appendChild(slide);
+  });
+
+  const nav = el('div', 'carousel-nav');
+
+  const prev = el('button', 'nav-btn prev');
+  prev.setAttribute('aria-label', 'Previous project');
+  prev.innerHTML = '<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>';
+
+  const dots = el('div', 'dots');
+
+  const next = el('button', 'nav-btn next');
+  next.setAttribute('aria-label', 'Next project');
+  next.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
+
+  nav.append(prev, dots, next);
+  carousel.append(track, nav);
+  return carousel;
+}
+
+// Wires one carousel: arrows, dots, and disabled states at the ends
+function initCarousel(carousel) {
+  const track = carousel.querySelector('.track');
+  const prev = carousel.querySelector('.prev');
+  const next = carousel.querySelector('.next');
+  const dotsBox = carousel.querySelector('.dots');
+
+  const visibleSlides = () => Array.from(track.querySelectorAll('.slide')).filter((s) => !s.hidden);
+
+  const stepSize = () => {
+    const first = visibleSlides()[0];
+    if (!first) return 0;
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    return first.offsetWidth + gap;
+  };
+
+  const currentIndex = () => {
+    const step = stepSize();
+    return step ? Math.round(track.scrollLeft / step) : 0;
+  };
+
+  function renderDots() {
+    dotsBox.innerHTML = '';
+    visibleSlides().forEach((_, i) => {
+      const dot = el('button', 'dot');
+      dot.setAttribute('aria-label', `Show project ${i + 1}`);
+      dot.addEventListener('click', () => {
+        track.scrollTo({ left: i * stepSize(), behavior: 'smooth' });
+      });
+      dotsBox.appendChild(dot);
+    });
+  }
+
+  function update() {
+    const count = visibleSlides().length;
+    const index = currentIndex();
+    Array.from(dotsBox.children).forEach((dot, i) => dot.classList.toggle('active', i === index));
+    prev.disabled = index <= 0;
+    next.disabled = index >= count - 1;
+  }
+
+  prev.addEventListener('click', () => track.scrollBy({ left: -stepSize(), behavior: 'smooth' }));
+  next.addEventListener('click', () => track.scrollBy({ left: stepSize(), behavior: 'smooth' }));
+  track.addEventListener('scroll', update, { passive: true });
+
+  // Used by the filters: go back to the first slide and rebuild the dots
+  carousel.refresh = () => {
+    track.scrollLeft = 0;
+    renderDots();
+    update();
+  };
+
+  renderDots();
+  update();
+}
+
 function renderIndex(data) {
   const root = document.getElementById('project-groups');
   root.innerHTML = '';
@@ -143,29 +244,13 @@ function renderIndex(data) {
     const items = data.projects.filter((p) => p.group === key);
     if (!items.length) return;
 
-    const section = document.createElement('div');
-    section.className = 'group';
-    section.innerHTML = `<h3 class="group-title">${label}</h3>`;
-
-    const grid = document.createElement('div');
-    grid.className = 'grid';
-    items.forEach((p) => {
-      const card = document.createElement('article');
-      card.className = 'card reveal';
-      card.dataset.cat = p.category;
-      card.innerHTML = `
-        ${p.image ? `<img src="${p.image}" alt="${escapeHTML(p.title)}">` : ''}
-        <span class="eyebrow">${STATUS_LABEL[p.group]}</span>
-        <h3>${escapeHTML(p.title)}</h3>
-        <p>${escapeHTML(p.summary)}</p>
-        <div class="links">
-          <a class="btn primary" href="project.html?p=${p.index}">Read more</a>
-        </div>`;
-      grid.appendChild(card);
-    });
-    section.appendChild(grid);
-    root.appendChild(section);
+    const group = el('div', 'group');
+    group.innerHTML = `<h3 class="group-title">${label}</h3>`;
+    group.appendChild(buildCarousel(items));
+    root.appendChild(group);
   });
+
+  root.querySelectorAll('.carousel').forEach(initCarousel);
 
   document.getElementById('next-steps').innerHTML = marked.parse(data.nextText);
   document.getElementById('infrastructure').innerHTML = marked.parse(data.infraText);
@@ -179,40 +264,53 @@ function setupFilters() {
       buttons.forEach((b) => b.classList.toggle('active', b === btn));
       const choice = btn.dataset.filter;
 
-      document.querySelectorAll('#project-groups .card').forEach((card) => {
-        card.hidden = !(choice === 'All' || card.dataset.cat === choice);
-      });
+      document.querySelectorAll('#project-groups .carousel').forEach((carousel) => {
+        const slides = carousel.querySelectorAll('.slide');
+        slides.forEach((slide) => {
+          slide.hidden = !(choice === 'All' || slide.dataset.cat === choice);
+        });
 
-      // Hide a group heading when none of its cards are visible
-      document.querySelectorAll('#project-groups .group').forEach((group) => {
-        group.hidden = group.querySelectorAll('.card:not([hidden])').length === 0;
+        // Hide the group heading when none of its slides are visible
+        const anyVisible = Array.from(slides).some((s) => !s.hidden);
+        carousel.closest('.group').hidden = !anyVisible;
+
+        carousel.refresh();
       });
     });
   });
 }
 
-// Turns link-only paragraphs into buttons, coloured by platform
+// Turns the links at the start of a paragraph into buttons, coloured by platform.
+// Any description text after the links stays in the paragraph, unchanged.
 function makeButtons(root) {
   root.querySelectorAll('p').forEach((p) => {
-    const links = Array.from(p.querySelectorAll('a'));
+    const links = [];
+    const separators = [];
+
+    for (const node of Array.from(p.childNodes)) {
+      const isLink = node.nodeType === 1 && node.tagName === 'A';
+      const isSeparator = node.nodeType === 3 && /^[\s·\-–]*$/.test(node.textContent);
+      if (isLink) links.push(node);
+      else if (isSeparator) separators.push(node);
+      else break;
+    }
+
     if (!links.length) return;
 
-    // Ignore spaces, middle dots and hyphens used as separators
-    const linkText = links.map((a) => a.textContent).join('').replace(/[·\-\s]/g, '');
-    const allText = p.textContent.replace(/[·\-\s]/g, '');
-    if (linkText !== allText) return; // the paragraph has other text, leave it alone
-
-    const box = document.createElement('div');
-    box.className = 'links';
+    const box = el('div', 'links');
     links.forEach((a) => {
-      a.classList.add('btn');
       const href = a.getAttribute('href') || '';
+      a.classList.add('btn');
       if (/github\.com/i.test(href)) a.classList.add('btn-github');
       else if (/kaggle\.com/i.test(href)) a.classList.add('btn-kaggle');
       else a.classList.add('btn-other');
       box.appendChild(a);
     });
-    p.replaceWith(box);
+
+    separators.forEach((n) => n.remove());
+    p.parentNode.insertBefore(box, p);
+
+    if (p.textContent.trim() === '' && p.children.length === 0) p.remove();
   });
 }
 
