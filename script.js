@@ -1,5 +1,8 @@
 const NOTE_URL = 'notes/ProjectsHub.md';
 
+// Only these groups are shown. Add 'progress' or 'dropped' here to show them again later.
+const SHOW_GROUPS = ['live'];
+
 // Card image, matched on the title as written in Obsidian
 const IMAGE_FOR = [
   [/Excel financial modeling/i, 'images/Tableau-viz.png'],
@@ -116,6 +119,10 @@ function parseNote(text) {
     const statusMatch = /status:\s*(.*)/i.exec(p.text);
     p.statusText = statusMatch ? statusMatch[1].trim() : '';
     p.group = classify(p.statusText);
+
+    // A project is public when its note links to GitHub or Kaggle
+    p.isPublic = /github\.com|kaggle\.com/i.test(p.text);
+
     p.summary = p.body
       .map((l) => l.trim())
       .find((l) => l
@@ -141,11 +148,16 @@ function parseNote(text) {
   };
 }
 
-// One carousel per group: slides, arrows and dots
+// One carousel: arrows on each side of the track, dots underneath
 function buildCarousel(items) {
   const carousel = el('div', 'carousel');
-  const track = el('div', 'track');
+  const stage = el('div', 'stage');
 
+  const prev = el('button', 'nav-btn prev');
+  prev.setAttribute('aria-label', 'Previous project');
+  prev.innerHTML = '<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>';
+
+  const track = el('div', 'track');
   items.forEach((p) => {
     const slide = el('div', 'slide');
     slide.dataset.cat = p.category;
@@ -163,20 +175,14 @@ function buildCarousel(items) {
     track.appendChild(slide);
   });
 
-  const nav = el('div', 'carousel-nav');
-
-  const prev = el('button', 'nav-btn prev');
-  prev.setAttribute('aria-label', 'Previous project');
-  prev.innerHTML = '<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>';
-
-  const dots = el('div', 'dots');
-
   const next = el('button', 'nav-btn next');
   next.setAttribute('aria-label', 'Next project');
   next.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
 
-  nav.append(prev, dots, next);
-  carousel.append(track, nav);
+  const dots = el('div', 'dots');
+
+  stage.append(prev, track, next);
+  carousel.append(stage, dots);
   return carousel;
 }
 
@@ -189,6 +195,7 @@ function initCarousel(carousel) {
 
   const visibleSlides = () => Array.from(track.querySelectorAll('.slide')).filter((s) => !s.hidden);
 
+  // Distance from one card to the next: card width plus the gap
   const stepSize = () => {
     const first = visibleSlides()[0];
     if (!first) return 0;
@@ -225,7 +232,7 @@ function initCarousel(carousel) {
   next.addEventListener('click', () => track.scrollBy({ left: stepSize(), behavior: 'smooth' }));
   track.addEventListener('scroll', update, { passive: true });
 
-  // Used by the filters: go back to the first slide and rebuild the dots
+  // Used by the filters: go back to the first card and rebuild the dots
   carousel.refresh = () => {
     track.scrollLeft = 0;
     renderDots();
@@ -240,15 +247,24 @@ function renderIndex(data) {
   const root = document.getElementById('project-groups');
   root.innerHTML = '';
 
-  GROUPS.forEach(([key, label]) => {
-    const items = data.projects.filter((p) => p.group === key);
-    if (!items.length) return;
+  // The group heading is shown only when more than one group is visible
+  const showHeading = SHOW_GROUPS.length > 1;
 
-    const group = el('div', 'group');
-    group.innerHTML = `<h3 class="group-title">${label}</h3>`;
-    group.appendChild(buildCarousel(items));
-    root.appendChild(group);
-  });
+  GROUPS
+    .filter(([key]) => SHOW_GROUPS.includes(key))
+    .forEach(([key, label]) => {
+      const items = data.projects.filter((p) => p.group === key && p.isPublic);
+      if (!items.length) return;
+
+      const group = el('div', 'group');
+      if (showHeading) group.innerHTML = `<h3 class="group-title">${label}</h3>`;
+      group.appendChild(buildCarousel(items));
+      root.appendChild(group);
+    });
+
+  if (!root.children.length) {
+    root.innerHTML = '<p>No public projects to show yet.</p>';
+  }
 
   root.querySelectorAll('.carousel').forEach(initCarousel);
 
@@ -270,7 +286,7 @@ function setupFilters() {
           slide.hidden = !(choice === 'All' || slide.dataset.cat === choice);
         });
 
-        // Hide the group heading when none of its slides are visible
+        // Hide the group when none of its slides are visible
         const anyVisible = Array.from(slides).some((s) => !s.hidden);
         carousel.closest('.group').hidden = !anyVisible;
 

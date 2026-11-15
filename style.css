@@ -82,34 +82,49 @@ p { margin: 0 0 1rem; }
 .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
 /* =========================================================
-   6. PROJECT CAROUSEL (one card at a time, one group per carousel)
+   6. PROJECT CAROUSEL: centred card, arrows on each side
    ========================================================= */
-.carousel { position: relative; }
+.carousel { width: 100%; }
+
+.stage { display: flex; align-items: center; gap: 1rem; }
 
 .track {
+  flex: 1;
+  min-width: 0;
   display: flex;
   gap: 1.5rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  padding: 0.5rem 0 1.5rem;
+  padding: 0.5rem 0 1rem;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
 .track::-webkit-scrollbar { display: none; }
 
-/* Each slide takes most of the width, so the next one peeks in at the edge */
-.slide { flex: 0 0 88%; max-width: 900px; scroll-snap-align: start; }
+/* Invisible spacers so the first and last card can sit in the centre */
+.track::before,
+.track::after {
+  content: "";
+  flex: 0 0 calc((100% - min(560px, 78%)) / 2 - 1.5rem);
+}
+
+/* Each card is narrower than the page and snaps to the centre */
+.slide {
+  flex: 0 0 min(560px, 78%);
+  scroll-snap-align: center;
+}
 .slide .card { height: 100%; }
 
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.5rem; display: flex; flex-direction: column; }
-.card img { width: 100%; aspect-ratio: 16 / 10; object-fit: contain; background: #1d1d21; border-radius: 10px; margin-bottom: 1rem; }
-.links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; padding-top: 1rem; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.25rem; display: flex; flex-direction: column; }
+.card img { width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #1d1d21; border-radius: 10px; margin-bottom: 0.9rem; }
+.slide h3 { font-size: 1.5rem; }
+.card p { font-size: 0.95rem; }
+.links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; padding-top: 0.9rem; }
 
-/* Navigation: arrows and dots */
-.carousel-nav { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem; }
-
+/* Arrows: sit on the left and right of the card */
 .nav-btn {
+  flex: 0 0 auto;
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -125,7 +140,8 @@ p { margin: 0 0 1rem; }
 .nav-btn:disabled { opacity: 0.3; cursor: default; transform: none; }
 .nav-btn svg { width: 16px; height: 16px; fill: none; stroke: #000; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
-.dots { display: flex; align-items: center; gap: 0.6rem; }
+/* Dots: white with black outline, filled black when active */
+.dots { display: flex; justify-content: center; align-items: center; gap: 0.6rem; margin-top: 1rem; }
 .dot {
   width: 12px;
   height: 12px;
@@ -240,7 +256,6 @@ p { margin: 0 0 1rem; }
 
   .filters { gap: 0.5rem; margin-bottom: 1.5rem; }
   .chip { font-size: 0.88rem; padding: 0.45rem 0.9rem; }
-  .slide { flex-basis: 92%; }
   .card { padding: 1.2rem; }
   .card img { aspect-ratio: 4 / 3; }
 
