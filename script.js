@@ -3,6 +3,15 @@ const NOTE_URL = 'notes/ProjectsHub.md';
 // Only these groups are shown. Add 'progress' or 'dropped' here to show them again later.
 const SHOW_GROUPS = ['live'];
 
+// Display order of the projects on the site. Names must match the site spelling exactly.
+// Projects not listed here appear last.
+const ORDER = [
+  'PreplyCopilot, CRM for Pei (my GF)',
+  'All-Weather Contrarian Optimizer',
+  'Strategic Portfolio Analysis',
+  'Daily newsletter (DailyDigest)',
+];
+
 // Card image, matched on the title as written in Obsidian
 const IMAGE_FOR = [
   [/Excel financial modeling/i, 'images/Tableau-viz.png'],
@@ -22,13 +31,10 @@ const DISPLAY_NAME = [
 
 const STATUS_LABEL = { live: 'Live', progress: 'In progress', dropped: 'Dropped' };
 
-// Display order of the projects on the site. Projects not listed here appear last.
-// Use the names as they appear on the site, one per line.
-const ORDER = [
-  'PreplyCopilot, CRM for Pei (my GF)',
-  'All-Weather Contrarian Optimizer',
-  'Strategic Portfolio Analysis',
-  'Daily newsletter (DailyDigest)',
+const GROUPS = [
+  ['live', 'Live projects'],
+  ['progress', 'In progress'],
+  ['dropped', 'Dropped projects and what I learned'],
 ];
 
 function rank(title) {
@@ -261,7 +267,7 @@ function renderIndex(data) {
   GROUPS
     .filter(([key]) => SHOW_GROUPS.includes(key))
     .forEach(([key, label]) => {
-            const items = data.projects
+      const items = data.projects
         .filter((p) => p.group === key && p.isPublic)
         .sort((a, b) => rank(a.title) - rank(b.title));
       if (!items.length) return;
@@ -381,7 +387,7 @@ const noteRoot = document.getElementById('note-content');
 if (projectsRoot || noteRoot) {
   fetch(NOTE_URL)
     .then((r) => {
-      if (!r.ok) throw new Error('missing');
+      if (!r.ok) throw new Error('notes/ProjectsHub.md not found (status ' + r.status + ')');
       return r.text();
     })
     .then((text) => {
@@ -393,12 +399,12 @@ if (projectsRoot || noteRoot) {
       if (noteRoot) renderProject(data);
       observeReveal();
     })
-        .catch((err) => {
+    .catch((err) => {
       console.error('Projects failed to load:', err);
       const detail = err && err.message ? err.message : String(err);
       if (projectsRoot) {
-        projectsRoot.innerHTML = `<p>Projects could not be loaded (${detail}). Check the console (F12) for details.</p>`;
+        projectsRoot.innerHTML = `<p>Projects could not be loaded (${escapeHTML(detail)}).</p>`;
       }
-      if (noteRoot) noteRoot.innerHTML = `<p>Project not found (${detail}).</p>`;
+      if (noteRoot) noteRoot.innerHTML = `<p>Project not found (${escapeHTML(detail)}).</p>`;
     });
 }
