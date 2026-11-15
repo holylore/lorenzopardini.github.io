@@ -3,16 +3,15 @@ const NOTE_URL = 'notes/ProjectsHub.md';
 // Only these groups are shown. Add 'progress' or 'dropped' here to show them again later.
 const SHOW_GROUPS = ['live'];
 
-// Display order of the projects on the site. Names must match the site spelling exactly.
-// Projects not listed here appear last.
+// Display order. Names must match the site spelling exactly. Unlisted projects go last.
 const ORDER = [
-  'PreplyCopilot, CRM for Pei (my GF)',
   'All-Weather Contrarian Optimizer',
+  'PreplyCopilot, CRM for Pei (my GF)',
   'Strategic Portfolio Analysis',
   'Daily newsletter (DailyDigest)',
 ];
 
-// Card image, matched on the title as written in Obsidian
+// Image shown on each card, matched on the title as written in Obsidian
 const IMAGE_FOR = [
   [/Excel financial modeling/i, 'images/Tableau-viz.png'],
   [/Google Colab Python/i, 'images/all-weather_optimizer.png'],
@@ -37,29 +36,29 @@ const GROUPS = [
   ['dropped', 'Dropped projects and what I learned'],
 ];
 
-function rank(title) {
-  const i = ORDER.indexOf(title);
-  return i === -1 ? 999 : i;
-}
+// Layout: cards start at the left edge of the track.
+// This overrides any older centring rule in style.css.
+const layoutFix = document.createElement('style');
+layoutFix.textContent = '.track { padding-left: 0 !important; padding-right: 0 !important; scroll-padding-inline: 0 !important; }';
+document.head.appendChild(layoutFix);
 
-function escapeHTML(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-  }[c]));
-}
+// Category filters are no longer used, so the buttons are removed from the page
+document.querySelector('.filters')?.remove();
 
-function el(tag, className) {
+const el = (tag, className) => {
   const node = document.createElement(tag);
   if (className) node.className = className;
   return node;
-}
+};
 
-// Filter category, decided from the project title
-function categoryOf(raw) {
-  if (/excel|colab|financecopilot/i.test(raw)) return 'Finance';
-  if (/chess/i.test(raw)) return 'Data';
-  return 'AI & Automation';
-}
+const escapeHTML = (s) => String(s).replace(/[&<>"']/g, (c) => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+}[c]));
+
+const rank = (title) => {
+  const i = ORDER.indexOf(title);
+  return i === -1 ? ORDER.length : i;
+};
 
 // Group, decided from the Status line written in Obsidian
 function classify(statusText) {
@@ -74,11 +73,11 @@ function classify(statusText) {
 function parseNote(text) {
   const lines = text.replace(/\r/g, '').split('\n');
   const projects = [];
+  const nextLines = [];
+  const infraLines = [];
   let pending = [];
   let current = null;
   let mode = 'projects';
-  const nextLines = [];
-  const infraLines = [];
 
   const flush = () => {
     if (current) {
@@ -133,10 +132,7 @@ function parseNote(text) {
     const statusMatch = /status:\s*(.*)/i.exec(p.text);
     p.statusText = statusMatch ? statusMatch[1].trim() : '';
     p.group = classify(p.statusText);
-
-    // A project is public when its note links to GitHub or Kaggle
     p.isPublic = /github\.com|kaggle\.com/i.test(p.text);
-
     p.summary = p.body
       .map((l) => l.trim())
       .find((l) => l
@@ -150,7 +146,6 @@ function parseNote(text) {
     const raw = p.title;
     const img = IMAGE_FOR.find(([re]) => re.test(raw));
     p.image = img ? img[1] : '';
-    p.category = categoryOf(raw);
     const name = DISPLAY_NAME.find(([re]) => re.test(raw));
     p.title = name ? name[1] : raw;
   });
@@ -174,8 +169,6 @@ function buildCarousel(items) {
   const track = el('div', 'track');
   items.forEach((p) => {
     const slide = el('div', 'slide');
-    slide.dataset.cat = p.category;
-
     const card = el('article', 'card reveal');
     card.innerHTML = `
       ${p.image ? `<img src="${p.image}" alt="${escapeHTML(p.title)}">` : ''}
@@ -193,10 +186,8 @@ function buildCarousel(items) {
   next.setAttribute('aria-label', 'Next project');
   next.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
 
-  const dots = el('div', 'dots');
-
   stage.append(prev, track, next);
-  carousel.append(stage, dots);
+  carousel.append(stage, el('div', 'dots'));
   return carousel;
 }
 
@@ -206,54 +197,30 @@ function initCarousel(carousel) {
   const prev = carousel.querySelector('.prev');
   const next = carousel.querySelector('.next');
   const dotsBox = carousel.querySelector('.dots');
-
-  const visibleSlides = () => Array.from(track.querySelectorAll('.slide')).filter((s) => !s.hidden);
+  const slides = Array.from(track.children);
 
   // Distance from one card to the next: card width plus the gap
-  const stepSize = () => {
-    const first = visibleSlides()[0];
-    if (!first) return 0;
-    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-    return first.offsetWidth + gap;
+  const step = () => slides[0].offsetWidth + (parseFloat(getComputedStyle(track).columnGap) || 0);
+  const index = () => Math.round(track.scrollLeft / step());
+
+  slides.forEach((_, i) => {
+    const dot = el('button', 'dot');
+    dot.setAttribute('aria-label', `Show project ${i + 1}`);
+    dot.addEventListener('click', () => track.scrollTo({ left: i * step(), behavior: 'smooth' }));
+    dotsBox.appendChild(dot);
+  });
+  const dots = Array.from(dotsBox.children);
+
+  const update = () => {
+    const i = index();
+    dots.forEach((d, n) => d.classList.toggle('active', n === i));
+    prev.disabled = i <= 0;
+    next.disabled = i >= slides.length - 1;
   };
 
-  const currentIndex = () => {
-    const step = stepSize();
-    return step ? Math.round(track.scrollLeft / step) : 0;
-  };
-
-  function renderDots() {
-    dotsBox.innerHTML = '';
-    visibleSlides().forEach((_, i) => {
-      const dot = el('button', 'dot');
-      dot.setAttribute('aria-label', `Show project ${i + 1}`);
-      dot.addEventListener('click', () => {
-        track.scrollTo({ left: i * stepSize(), behavior: 'smooth' });
-      });
-      dotsBox.appendChild(dot);
-    });
-  }
-
-  function update() {
-    const count = visibleSlides().length;
-    const index = currentIndex();
-    Array.from(dotsBox.children).forEach((dot, i) => dot.classList.toggle('active', i === index));
-    prev.disabled = index <= 0;
-    next.disabled = index >= count - 1;
-  }
-
-  prev.addEventListener('click', () => track.scrollBy({ left: -stepSize(), behavior: 'smooth' }));
-  next.addEventListener('click', () => track.scrollBy({ left: stepSize(), behavior: 'smooth' }));
+  prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
   track.addEventListener('scroll', update, { passive: true });
-
-  // Used by the filters: go back to the first card and rebuild the dots
-  carousel.refresh = () => {
-    track.scrollLeft = 0;
-    renderDots();
-    update();
-  };
-
-  renderDots();
   update();
 }
 
@@ -261,7 +228,7 @@ function renderIndex(data) {
   const root = document.getElementById('project-groups');
   root.innerHTML = '';
 
-  // The group heading is shown only when more than one group is visible
+  // Group headings appear only when more than one group is shown
   const showHeading = SHOW_GROUPS.length > 1;
 
   GROUPS
@@ -286,30 +253,6 @@ function renderIndex(data) {
 
   document.getElementById('next-steps').innerHTML = marked.parse(data.nextText);
   document.getElementById('infrastructure').innerHTML = marked.parse(data.infraText);
-}
-
-// Filter buttons: All, Finance, AI & Automation, Data
-function setupFilters() {
-  const buttons = document.querySelectorAll('[data-filter]');
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      buttons.forEach((b) => b.classList.toggle('active', b === btn));
-      const choice = btn.dataset.filter;
-
-      document.querySelectorAll('#project-groups .carousel').forEach((carousel) => {
-        const slides = carousel.querySelectorAll('.slide');
-        slides.forEach((slide) => {
-          slide.hidden = !(choice === 'All' || slide.dataset.cat === choice);
-        });
-
-        // Hide the group when none of its slides are visible
-        const anyVisible = Array.from(slides).some((s) => !s.hidden);
-        carousel.closest('.group').hidden = !anyVisible;
-
-        carousel.refresh();
-      });
-    });
-  });
 }
 
 // Turns the links at the start of a paragraph into buttons, coloured by platform.
@@ -341,8 +284,7 @@ function makeButtons(root) {
 
     separators.forEach((n) => n.remove());
     p.parentNode.insertBefore(box, p);
-
-    if (p.textContent.trim() === '' && p.children.length === 0) p.remove();
+    if (!p.textContent.trim() && !p.children.length) p.remove();
   });
 }
 
@@ -359,13 +301,14 @@ function renderProject(data) {
     : '';
   root.innerHTML = `${statusLine}<h1>${escapeHTML(p.title)}</h1>${marked.parse(p.text)}`;
   makeButtons(root);
-  document.title = p.title + ' — Lorenzo Pardini';
+  document.title = `${p.title} — Lorenzo Pardini`;
 }
 
+// Fades elements in as they scroll into view. Runs after content is rendered.
 function observeReveal() {
   const items = document.querySelectorAll('.reveal:not(.in)');
   if (!('IntersectionObserver' in window)) {
-    items.forEach((el) => el.classList.add('in'));
+    items.forEach((node) => node.classList.add('in'));
     return;
   }
   const io = new IntersectionObserver((entries) => {
@@ -376,10 +319,8 @@ function observeReveal() {
       }
     });
   }, { threshold: 0.12 });
-  items.forEach((el) => io.observe(el));
+  items.forEach((node) => io.observe(node));
 }
-
-observeReveal();
 
 const projectsRoot = document.getElementById('project-groups');
 const noteRoot = document.getElementById('note-content');
@@ -387,24 +328,22 @@ const noteRoot = document.getElementById('note-content');
 if (projectsRoot || noteRoot) {
   fetch(NOTE_URL)
     .then((r) => {
-      if (!r.ok) throw new Error('notes/ProjectsHub.md not found (status ' + r.status + ')');
+      if (!r.ok) throw new Error(`notes/ProjectsHub.md not found (status ${r.status})`);
       return r.text();
     })
     .then((text) => {
       const data = parseNote(text);
-      if (projectsRoot) {
-        renderIndex(data);
-        setupFilters();
-      }
+      if (projectsRoot) renderIndex(data);
       if (noteRoot) renderProject(data);
       observeReveal();
     })
     .catch((err) => {
       console.error('Projects failed to load:', err);
-      const detail = err && err.message ? err.message : String(err);
-      if (projectsRoot) {
-        projectsRoot.innerHTML = `<p>Projects could not be loaded (${escapeHTML(detail)}).</p>`;
-      }
-      if (noteRoot) noteRoot.innerHTML = `<p>Project not found (${escapeHTML(detail)}).</p>`;
+      const detail = escapeHTML(err && err.message ? err.message : String(err));
+      if (projectsRoot) projectsRoot.innerHTML = `<p>Projects could not be loaded (${detail}).</p>`;
+      if (noteRoot) noteRoot.innerHTML = `<p>Project not found (${detail}).</p>`;
     });
 }
+
+// Show static content (hero, offer, timeline) even if the note fails to load
+observeReveal();
