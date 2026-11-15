@@ -22,11 +22,19 @@ const DISPLAY_NAME = [
 
 const STATUS_LABEL = { live: 'Live', progress: 'In progress', dropped: 'Dropped' };
 
-const GROUPS = [
-  ['live', 'Live projects'],
-  ['progress', 'In progress'],
-  ['dropped', 'Dropped projects and what I learned'],
+// Display order of the projects on the site. Projects not listed here appear last.
+// Use the names as they appear on the site, one per line.
+const ORDER = [
+  'Strategic Portfolio Analysis',
+  'All-Weather Contrarian Optimizer',
+  'Daily newsletter (DailyDigest)',
+  'PreplyCopilot, CRM for Pei (my GF)',
 ];
+
+function rank(title) {
+  const i = ORDER.indexOf(title);
+  return i === -1 ? 999 : i;
+}
 
 function escapeHTML(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({
@@ -253,7 +261,9 @@ function renderIndex(data) {
   GROUPS
     .filter(([key]) => SHOW_GROUPS.includes(key))
     .forEach(([key, label]) => {
-      const items = data.projects.filter((p) => p.group === key && p.isPublic);
+            const items = data.projects
+        .filter((p) => p.group === key && p.isPublic)
+        .sort((a, b) => rank(a.title) - rank(b.title));
       if (!items.length) return;
 
       const group = el('div', 'group');
