@@ -5,8 +5,8 @@ const SHOW_GROUPS = ['live'];
 
 // Display order. Names must match the site spelling exactly. Unlisted projects go last.
 const ORDER = [
-  'All-Weather Contrarian Optimizer',
   'PreplyCopilot, CRM for Pei (my GF)',
+  'All-Weather Contrarian Optimizer',
   'Strategic Portfolio Analysis',
   'Daily newsletter (DailyDigest)',
 ];
