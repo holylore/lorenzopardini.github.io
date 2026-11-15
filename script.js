@@ -25,10 +25,10 @@ const STATUS_LABEL = { live: 'Live', progress: 'In progress', dropped: 'Dropped'
 // Display order of the projects on the site. Projects not listed here appear last.
 // Use the names as they appear on the site, one per line.
 const ORDER = [
-  'Strategic Portfolio Analysis',
-  'All-Weather Contrarian Optimizer',
-  'Daily newsletter (DailyDigest)',
   'PreplyCopilot, CRM for Pei (my GF)',
+  'All-Weather Contrarian Optimizer',
+  'Strategic Portfolio Analysis',
+  'Daily newsletter (DailyDigest)',
 ];
 
 function rank(title) {
