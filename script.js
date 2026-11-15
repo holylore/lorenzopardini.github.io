@@ -393,10 +393,12 @@ if (projectsRoot || noteRoot) {
       if (noteRoot) renderProject(data);
       observeReveal();
     })
-    .catch(() => {
+        .catch((err) => {
+      console.error('Projects failed to load:', err);
+      const detail = err && err.message ? err.message : String(err);
       if (projectsRoot) {
-        projectsRoot.innerHTML = '<p>Projects could not be loaded. Check that notes/ProjectsHub.md exists.</p>';
+        projectsRoot.innerHTML = `<p>Projects could not be loaded (${detail}). Check the console (F12) for details.</p>`;
       }
-      if (noteRoot) noteRoot.innerHTML = '<p>Project not found.</p>';
+      if (noteRoot) noteRoot.innerHTML = `<p>Project not found (${detail}).</p>`;
     });
 }
