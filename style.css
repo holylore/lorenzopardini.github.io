@@ -283,3 +283,28 @@ p { margin: 0 0 1rem; }
   .footer .wrap { flex-direction: column; align-items: flex-start; }
   .footer a { margin-left: 0; margin-right: 1rem; }
 }
+
+/* NVIDIA slides in the Marketing Associate card (scoped, so the project carousel is not affected) */
+.tl-card .carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 0.5rem 0 1rem;
+  margin-top: 1rem;
+  width: auto;
+}
+.tl-card .carousel img {
+  flex: 0 0 auto;
+  height: 320px;
+  width: auto;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  scroll-snap-align: start;
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .tl-card .carousel img { height: 240px; }
+}
