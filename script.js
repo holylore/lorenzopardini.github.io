@@ -136,9 +136,11 @@ function parseNote(text) {
   };
 }
 
-// One card per public project, in a two-column grid
-function buildGrid(items) {
-  const grid = el('div', 'grid');
+// Horizontal scrolling row of project cards, with previous and next buttons
+function buildScroller(items) {
+  const wrap = el('div', 'scroller');
+  const track = el('div', 'track');
+
   items.forEach((p) => {
     const card = el('article', 'card reveal');
     card.innerHTML = `
@@ -149,9 +151,35 @@ function buildGrid(items) {
       <div class="links">
         <a class="btn primary" href="project.html?p=${p.index}">Read more</a>
       </div>`;
-    grid.appendChild(card);
+    track.appendChild(card);
   });
-  return grid;
+
+  if (items.length > 1) {
+    const nav = el('div', 'track-nav');
+    const prev = el('button');
+    const next = el('button');
+    prev.textContent = '←';
+    next.textContent = '→';
+    prev.setAttribute('aria-label', 'Previous project');
+    next.setAttribute('aria-label', 'Next project');
+
+    const step = () => track.clientWidth * 0.8;
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+
+    const update = () => {
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+    };
+    track.addEventListener('scroll', update, { passive: true });
+    requestAnimationFrame(update);
+
+    nav.append(prev, next);
+    wrap.appendChild(nav);
+  }
+
+  wrap.appendChild(track);
+  return wrap;
 }
 
 function renderIndex(data) {
@@ -164,10 +192,11 @@ function renderIndex(data) {
   if (!items.length) {
     root.innerHTML = '<p>No public projects to show yet.</p>';
   } else {
-    root.appendChild(buildGrid(items));
+    root.appendChild(buildScroller(items));
   }
 
-  document.getElementById('next-steps').innerHTML = marked.parse(data.nextText);
+  // breaks: true keeps single line breaks from the note, as written in Obsidian
+  document.getElementById('next-steps').innerHTML = marked.parse(data.nextText, { breaks: true });
 }
 
 // Turns the links at the start of a paragraph into buttons, coloured by platform.
