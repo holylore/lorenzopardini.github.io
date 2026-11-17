@@ -1,49 +1,34 @@
-const NOTE_URL = 'notes/ProjectsHub.md';
+// The note must sit in notes/ with exactly this name on GitHub
+const NOTE_URL = 'notes/PoW - Pages.md';
 
-// Only these groups are shown. Add 'progress' or 'dropped' here to show them again later.
+// Only live projects are shown. Add 'progress' or 'dropped' here to show them later.
 const SHOW_GROUPS = ['live'];
 
-// Display order. Names must match the site spelling exactly. Unlisted projects go last.
+// Display order, using the names shown on the site
 const ORDER = [
-  'PreplyCopilot, CRM for Pei (my GF)',
   'All-Weather Contrarian Optimizer',
+  'Pei Attention CRM',
   'Strategic Portfolio Analysis',
-  'Daily newsletter (DailyDigest)',
+  'DailyDigest',
 ];
 
-// Image shown on each card, matched on the title as written in Obsidian
+// Image for each card, matched on the Obsidian title (old and new names both work)
 const IMAGE_FOR = [
-  [/Excel financial modeling/i, 'images/Tableau-viz.png'],
-  [/Google Colab Python/i, 'images/all-weather_optimizer.png'],
-  [/FinanceCopilot/i, 'images/FinanceCopilot.png'],
-  [/DailyDigest/i, 'images/DailyDigest_Workflow.png'],
-  [/PreplyCopilot/i, 'images/Notion-CRM_Assistant.png'],
-  [/Dify/i, 'images/DifyFail.png'],
+  [/Excel financial modeling|Portfolio Strategic/i, 'images/Tableau-viz.png'],
+  [/Google Colab Python|All-Weather/i, 'images/all-weather_optimizer.png'],
+  [/DailyDigest|Daily newsletter/i, 'images/DailyDigest_Workflow.png'],
+  [/PreplyCopilot|Pei Attention/i, 'images/Notion-CRM_Assistant.png'],
 ];
 
-// Names shown on the site. The Obsidian titles stay as they are.
+// Names shown on the site. Obsidian titles stay as they are.
 const DISPLAY_NAME = [
-  [/^Excel financial modeling/i, 'Strategic Portfolio Analysis'],
-  [/^Google Colab Python/i, 'All-Weather Contrarian Optimizer'],
-  [/^PreplyCopilot, CRM for Pei/i, 'PreplyCopilot, CRM for Pei (my GF)'],
+  [/^Excel financial modeling|^Portfolio Strategic/i, 'Strategic Portfolio Analysis'],
+  [/^Google Colab Python|^All-Weather/i, 'All-Weather Contrarian Optimizer'],
+  [/^PreplyCopilot|^Pei Attention/i, 'Pei Attention CRM'],
+  [/^Daily newsletter|^DailyDigest/i, 'DailyDigest'],
 ];
 
 const STATUS_LABEL = { live: 'Live', progress: 'In progress', dropped: 'Dropped' };
-
-const GROUPS = [
-  ['live', 'Live projects'],
-  ['progress', 'In progress'],
-  ['dropped', 'Dropped projects and what I learned'],
-];
-
-// Layout: cards start at the left edge of the track.
-// This overrides any older centring rule in style.css.
-const layoutFix = document.createElement('style');
-layoutFix.textContent = '.track { padding-left: 0 !important; padding-right: 0 !important; scroll-padding-inline: 0 !important; }';
-document.head.appendChild(layoutFix);
-
-// Category filters are no longer used, so the buttons are removed from the page
-document.querySelector('.filters')?.remove();
 
 const el = (tag, className) => {
   const node = document.createElement(tag);
@@ -60,7 +45,7 @@ const rank = (title) => {
   return i === -1 ? ORDER.length : i;
 };
 
-// Group, decided from the Status line written in Obsidian
+// Group, decided from the Status line in Obsidian
 function classify(statusText) {
   const s = (statusText || '').toLowerCase();
   if (/dropped|abandon|retired/.test(s)) return 'dropped';
@@ -69,15 +54,14 @@ function classify(statusText) {
   return 'progress';
 }
 
-// Splits the note into projects, next steps and infrastructure, keeping the text as written
+// Splits the note into projects and the "What comes next" text
 function parseNote(text) {
   const lines = text.replace(/\r/g, '').split('\n');
   const projects = [];
   const nextLines = [];
-  const infraLines = [];
   let pending = [];
   let current = null;
-  let mode = 'projects';
+  let inNext = false;
 
   const flush = () => {
     if (current) {
@@ -90,16 +74,12 @@ function parseNote(text) {
     const heading = /^##\s+(.+)$/.exec(line);
     if (heading) {
       flush();
-      const name = heading[1].trim().toLowerCase();
-      if (name.startsWith('next steps')) { mode = 'next'; continue; }
-      if (name.startsWith('infrastructure')) { mode = 'infra'; continue; }
-      mode = 'projects';
-      pending.push(line);
+      inNext = heading[1].trim().toLowerCase().startsWith('what comes next');
+      if (!inNext) pending.push(line);
       continue;
     }
 
-    if (mode === 'next') { nextLines.push(line); continue; }
-    if (mode === 'infra') { infraLines.push(line); continue; }
+    if (inNext) { nextLines.push(line); continue; }
 
     const entry = /^- \*\*(.+?)\*\*/.exec(line);
     if (entry) {
@@ -153,22 +133,13 @@ function parseNote(text) {
   return {
     projects,
     nextText: nextLines.join('\n').trim(),
-    infraText: infraLines.join('\n').trim(),
   };
 }
 
-// One carousel: arrows on each side of the track, dots underneath
-function buildCarousel(items) {
-  const carousel = el('div', 'carousel');
-  const stage = el('div', 'stage');
-
-  const prev = el('button', 'nav-btn prev');
-  prev.setAttribute('aria-label', 'Previous project');
-  prev.innerHTML = '<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>';
-
-  const track = el('div', 'track');
+// One card per public project, in a two-column grid
+function buildGrid(items) {
+  const grid = el('div', 'grid');
   items.forEach((p) => {
-    const slide = el('div', 'slide');
     const card = el('article', 'card reveal');
     card.innerHTML = `
       ${p.image ? `<img src="${p.image}" alt="${escapeHTML(p.title)}">` : ''}
@@ -178,85 +149,28 @@ function buildCarousel(items) {
       <div class="links">
         <a class="btn primary" href="project.html?p=${p.index}">Read more</a>
       </div>`;
-    slide.appendChild(card);
-    track.appendChild(slide);
+    grid.appendChild(card);
   });
-
-  const next = el('button', 'nav-btn next');
-  next.setAttribute('aria-label', 'Next project');
-  next.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
-
-  stage.append(prev, track, next);
-  carousel.append(stage, el('div', 'dots'));
-  return carousel;
-}
-
-// Wires one carousel: arrows, dots, and disabled states at the ends
-function initCarousel(carousel) {
-  const track = carousel.querySelector('.track');
-  const prev = carousel.querySelector('.prev');
-  const next = carousel.querySelector('.next');
-  const dotsBox = carousel.querySelector('.dots');
-  const slides = Array.from(track.children);
-
-  // Distance from one card to the next: card width plus the gap
-  const step = () => slides[0].offsetWidth + (parseFloat(getComputedStyle(track).columnGap) || 0);
-  const index = () => Math.round(track.scrollLeft / step());
-
-  slides.forEach((_, i) => {
-    const dot = el('button', 'dot');
-    dot.setAttribute('aria-label', `Show project ${i + 1}`);
-    dot.addEventListener('click', () => track.scrollTo({ left: i * step(), behavior: 'smooth' }));
-    dotsBox.appendChild(dot);
-  });
-  const dots = Array.from(dotsBox.children);
-
-  const update = () => {
-    const i = index();
-    dots.forEach((d, n) => d.classList.toggle('active', n === i));
-    prev.disabled = i <= 0;
-    next.disabled = i >= slides.length - 1;
-  };
-
-  prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
-  next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
-  track.addEventListener('scroll', update, { passive: true });
-  update();
+  return grid;
 }
 
 function renderIndex(data) {
   const root = document.getElementById('project-groups');
+  const items = data.projects
+    .filter((p) => SHOW_GROUPS.includes(p.group) && p.isPublic)
+    .sort((a, b) => rank(a.title) - rank(b.title));
+
   root.innerHTML = '';
-
-  // Group headings appear only when more than one group is shown
-  const showHeading = SHOW_GROUPS.length > 1;
-
-  GROUPS
-    .filter(([key]) => SHOW_GROUPS.includes(key))
-    .forEach(([key, label]) => {
-      const items = data.projects
-        .filter((p) => p.group === key && p.isPublic)
-        .sort((a, b) => rank(a.title) - rank(b.title));
-      if (!items.length) return;
-
-      const group = el('div', 'group');
-      if (showHeading) group.innerHTML = `<h3 class="group-title">${label}</h3>`;
-      group.appendChild(buildCarousel(items));
-      root.appendChild(group);
-    });
-
-  if (!root.children.length) {
+  if (!items.length) {
     root.innerHTML = '<p>No public projects to show yet.</p>';
+  } else {
+    root.appendChild(buildGrid(items));
   }
 
-  root.querySelectorAll('.carousel').forEach(initCarousel);
-
   document.getElementById('next-steps').innerHTML = marked.parse(data.nextText);
-  document.getElementById('infrastructure').innerHTML = marked.parse(data.infraText);
 }
 
 // Turns the links at the start of a paragraph into buttons, coloured by platform.
-// Any description text after the links stays in the paragraph, unchanged.
 function makeButtons(root) {
   root.querySelectorAll('p').forEach((p) => {
     const links = [];
@@ -296,15 +210,13 @@ function renderProject(data) {
     root.innerHTML = '<p>Project not found.</p>';
     return;
   }
-  const statusLine = p.statusText
-    ? `<span class="eyebrow">${STATUS_LABEL[p.group]} · ${escapeHTML(p.statusText)}</span>`
-    : '';
-  root.innerHTML = `${statusLine}<h1>${escapeHTML(p.title)}</h1>${marked.parse(p.text)}`;
+  // Only the group label is shown here. The status sentence stays in the body text.
+  root.innerHTML = `<span class="eyebrow">${STATUS_LABEL[p.group]}</span><h1>${escapeHTML(p.title)}</h1>${marked.parse(p.text)}`;
   makeButtons(root);
   document.title = `${p.title} — Lorenzo Pardini`;
 }
 
-// Fades elements in as they scroll into view. Runs after content is rendered.
+// Fades elements in as they scroll into view
 function observeReveal() {
   const items = document.querySelectorAll('.reveal:not(.in)');
   if (!('IntersectionObserver' in window)) {
@@ -328,7 +240,7 @@ const noteRoot = document.getElementById('note-content');
 if (projectsRoot || noteRoot) {
   fetch(NOTE_URL)
     .then((r) => {
-      if (!r.ok) throw new Error(`notes/ProjectsHub.md not found (status ${r.status})`);
+      if (!r.ok) throw new Error(`${NOTE_URL} not found (status ${r.status})`);
       return r.text();
     })
     .then((text) => {
@@ -345,5 +257,5 @@ if (projectsRoot || noteRoot) {
     });
 }
 
-// Show static content (hero, offer, timeline) even if the note fails to load
+// Static content (hero, timeline, about) animates even if the note fails to load
 observeReveal();
