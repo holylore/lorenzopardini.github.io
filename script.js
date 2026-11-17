@@ -1,5 +1,9 @@
-// The note must sit in notes/ with exactly this name on GitHub
-const NOTE_URL = 'notes/PoW - Pages.md';
+// Tries each file name in order, so a renamed upload on GitHub still works
+const NOTE_URLS = [
+  'notes/PoW - Pages.md',
+  'notes/PoW_-_Pages.md',
+  'notes/PoW-Pages.md',
+];
 
 // Only live projects are shown. Add 'progress' or 'dropped' here to show them later.
 const SHOW_GROUPS = ['live'];
@@ -54,6 +58,12 @@ function classify(statusText) {
   return 'progress';
 }
 
+// Accepts both "Next Steps" and "What comes next" as the heading
+function isNextHeading(title) {
+  const t = title.trim().toLowerCase();
+  return t.startsWith('what comes next') || t.startsWith('next steps');
+}
+
 // Splits the note into projects and the "What comes next" text
 function parseNote(text) {
   const lines = text.replace(/\r/g, '').split('\n');
@@ -74,7 +84,7 @@ function parseNote(text) {
     const heading = /^##\s+(.+)$/.exec(line);
     if (heading) {
       flush();
-      inNext = heading[1].trim().toLowerCase().startsWith('what comes next');
+      inNext = isNextHeading(heading[1]);
       if (!inNext) pending.push(line);
       continue;
     }
@@ -182,6 +192,19 @@ function buildScroller(items) {
   return wrap;
 }
 
+// Renders the "What comes next" text, keeping single line breaks as written
+function renderNext(text) {
+  const box = document.getElementById('next-steps');
+  if (!text) {
+    box.innerHTML = '<p>The "What comes next" section was not found in the note.</p>';
+    return;
+  }
+  const html = (typeof marked !== 'undefined')
+    ? marked.parse(text, { breaks: true })
+    : text.split('\n').map((l) => `<p>${escapeHTML(l)}</p>`).join('');
+  box.innerHTML = html;
+}
+
 function renderIndex(data) {
   const root = document.getElementById('project-groups');
   const items = data.projects
@@ -195,8 +218,7 @@ function renderIndex(data) {
     root.appendChild(buildScroller(items));
   }
 
-  // breaks: true keeps single line breaks from the note, as written in Obsidian
-  document.getElementById('next-steps').innerHTML = marked.parse(data.nextText, { breaks: true });
+  renderNext(data.nextText);
 }
 
 // Turns the links at the start of a paragraph into buttons, coloured by platform.
@@ -239,7 +261,6 @@ function renderProject(data) {
     root.innerHTML = '<p>Project not found.</p>';
     return;
   }
-  // Only the group label is shown here. The status sentence stays in the body text.
   root.innerHTML = `<span class="eyebrow">${STATUS_LABEL[p.group]}</span><h1>${escapeHTML(p.title)}</h1>${marked.parse(p.text)}`;
   makeButtons(root);
   document.title = `${p.title} — Lorenzo Pardini`;
@@ -263,15 +284,22 @@ function observeReveal() {
   items.forEach((node) => io.observe(node));
 }
 
+// Tries each note file name until one loads
+async function fetchNote() {
+  let lastStatus = '';
+  for (const url of NOTE_URLS) {
+    const r = await fetch(url);
+    if (r.ok) return r.text();
+    lastStatus = `${url} (status ${r.status})`;
+  }
+  throw new Error(`note not found: ${lastStatus}`);
+}
+
 const projectsRoot = document.getElementById('project-groups');
 const noteRoot = document.getElementById('note-content');
 
 if (projectsRoot || noteRoot) {
-  fetch(NOTE_URL)
-    .then((r) => {
-      if (!r.ok) throw new Error(`${NOTE_URL} not found (status ${r.status})`);
-      return r.text();
-    })
+  fetchNote()
     .then((text) => {
       const data = parseNote(text);
       if (projectsRoot) renderIndex(data);
@@ -281,8 +309,10 @@ if (projectsRoot || noteRoot) {
     .catch((err) => {
       console.error('Projects failed to load:', err);
       const detail = escapeHTML(err && err.message ? err.message : String(err));
-      if (projectsRoot) projectsRoot.innerHTML = `<p>Projects could not be loaded (${detail}).</p>`;
-      if (noteRoot) noteRoot.innerHTML = `<p>Project not found (${detail}).</p>`;
+      if (projectsRoot) projectsRoot.innerHTML = `<p>Projects could not be loaded: ${detail}.</p>`;
+      const next = document.getElementById('next-steps');
+      if (next) next.innerHTML = `<p>The note could not be loaded: ${detail}.</p>`;
+      if (noteRoot) noteRoot.innerHTML = `<p>Project not found: ${detail}.</p>`;
     });
 }
 

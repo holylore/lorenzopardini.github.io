@@ -6,10 +6,10 @@
   --card: #FBF8F3;
   --ink: #2B2420;
   --muted: #6E625A;
-  --accent: #B4572F;        /* clay: links, buttons, timeline dots */
-  --accent-dark: #8F4422;   /* clay hover */
-  --accent-soft: #D9936A;   /* clay soft: decoration only */
-  --teal: #1F5B5A;          /* information and "bring" line */
+  --accent: #B4572F;
+  --accent-dark: #8F4422;
+  --accent-soft: #D9936A;
+  --teal: #1F5B5A;
   --line: rgba(43, 36, 32, 0.12);
   --font: Georgia, "Times New Roman", serif;
 }
@@ -17,7 +17,6 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 5rem; overflow-x: hidden; }
 
-/* Soft colour glows and fine grain, fixed behind the page so the background feels alive */
 body {
   margin: 0;
   padding-top: 64px;
@@ -48,7 +47,7 @@ img { max-width: 100%; display: block; }
 [hidden] { display: none !important; }
 
 h1, h2, h3 { font-family: var(--font); font-weight: normal; line-height: 1.2; margin: 0; }
-h1 { font-size: clamp(2.2rem, 3.9vw, 3.4rem); }
+h1 { font-size: clamp(2rem, 3.2vw, 2.8rem); }
 h2 { font-size: clamp(2.2rem, 4vw, 3.2rem); margin-bottom: 2rem; }
 h3 { font-size: 1.5rem; margin: 0.3rem 0 0.6rem; }
 p { margin: 0 0 1rem; }
@@ -61,17 +60,15 @@ p { margin: 0 0 1rem; }
 .sub-h { margin-top: 3.5rem; font-size: 1.9rem; }
 .prose { max-width: 760px; }
 
-/* Blocks inside Cool Stuff */
 .block { margin-bottom: 4.5rem; }
 .block-title { font-size: 2rem; margin-bottom: 1.5rem; }
 .bring-line { color: var(--teal); font-size: 1.1rem; margin: -0.6rem 0 1.2rem; }
 
-/* Reveal on scroll: hidden only when JavaScript is on */
 .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s ease, transform 0.9s ease; }
 .js .reveal.in { opacity: 1; transform: none; }
 
 /* =========================================================
-   2. HEADER: fixed at the top
+   2. HEADER
    ========================================================= */
 .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 20; background: rgba(244, 240, 234, 0.94); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
 .nav-wrap { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; height: 64px; flex-wrap: wrap; }
@@ -81,7 +78,7 @@ p { margin: 0 0 1rem; }
 .site-header nav a:hover { color: var(--ink); border-color: var(--accent); }
 
 /* =========================================================
-   3. HERO
+   3. HERO: name on one line
    ========================================================= */
 .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; align-items: center; padding: 6rem 1.5rem 4rem; max-width: 1180px; margin: 0 auto; }
 .hero h1 { white-space: nowrap; }
@@ -109,7 +106,7 @@ p { margin: 0 0 1rem; }
 .btn.primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: var(--card); }
 
 /* =========================================================
-   6. PROJECT SCROLLER: horizontal cards with snap
+   6. PROJECT SCROLLER
    ========================================================= */
 .scroller { position: relative; }
 .track-nav { display: flex; justify-content: flex-end; gap: 0.6rem; margin-bottom: 1rem; }
@@ -140,25 +137,23 @@ p { margin: 0 0 1rem; }
 .next-photo { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 14px; margin: 0; }
 
 /* =========================================================
-   7. ACADEMIC TIMELINE (slightly smaller cards)
+   7. ACADEMIC TIMELINE: smaller cards
    ========================================================= */
 .timeline { list-style: none; padding: 0; margin: 0; position: relative; }
 .timeline::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #cbbfb2; transform: translateX(-50%); z-index: 0; }
-.tl-item { display: grid; grid-template-columns: 1fr 40px 1fr; align-items: start; margin-bottom: 3rem; }
-.tl-dot { grid-column: 2; grid-row: 1; width: 11px; height: 11px; border-radius: 50%; background: var(--accent); justify-self: center; margin-top: 1.8rem; position: relative; z-index: 2; }
-.tl-card { grid-row: 1; position: relative; z-index: 1; width: 100%; max-width: 440px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.3rem 1.4rem; }
-.tl-card h3 { font-size: 1.3rem; }
-.tl-card p { font-size: 0.95rem; margin-bottom: 0.7rem; }
-.tl-card .eyebrow { font-size: 0.7rem; }
-.tl-card img { width: 100%; border-radius: 10px; margin-top: 0.7rem; }
+.tl-item { display: grid; grid-template-columns: 1fr 40px 1fr; align-items: start; margin-bottom: 2.5rem; }
+.tl-dot { grid-column: 2; grid-row: 1; width: 11px; height: 11px; border-radius: 50%; background: var(--accent); justify-self: center; margin-top: 1.6rem; position: relative; z-index: 2; }
+.tl-card { grid-row: 1; position: relative; z-index: 1; width: 100%; max-width: 380px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.1rem 1.2rem; }
+.tl-card h3 { font-size: 1.15rem; }
+.tl-card p { font-size: 0.9rem; margin-bottom: 0.6rem; }
+.tl-card .eyebrow { font-size: 0.68rem; margin-bottom: 0.4rem; }
+.tl-card img { width: 100%; border-radius: 10px; margin-top: 0.6rem; }
 .tl-item.left .tl-card { grid-column: 1; justify-self: end; }
 .tl-item.right .tl-card { grid-column: 3; justify-self: start; }
 
-/* NVIDIA slides inside the Marketing Associate card */
-.tl-card .carousel { display: flex; gap: 0.8rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.5rem 0 0.8rem; margin-top: 0.7rem; }
-.tl-card .carousel img { flex: 0 0 auto; height: 240px; width: auto; border-radius: 10px; border: 1px solid var(--line); background: #fff; scroll-snap-align: start; margin: 0; }
+.tl-card .carousel { display: flex; gap: 0.7rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.4rem 0 0.7rem; margin-top: 0.6rem; }
+.tl-card .carousel img { flex: 0 0 auto; height: 200px; width: auto; border-radius: 10px; border: 1px solid var(--line); background: #fff; scroll-snap-align: start; margin: 0; }
 
-/* Certifications */
 .cert-list li { padding: 0.8rem 0; border-bottom: 1px solid var(--line); line-height: 1.6; }
 .cert-links { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.4rem; }
 .cert-links a { color: var(--accent); font-size: 0.92rem; }
@@ -180,7 +175,7 @@ p { margin: 0 0 1rem; }
 .pair-right > img { grid-column: 2; grid-row: 2; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; margin: 2.5rem 0 0; }
 
 /* =========================================================
-   9. PROJECT PAGE (project.html)
+   9. PROJECT PAGE
    ========================================================= */
 .note { max-width: 760px; margin: 0 auto; padding: 5rem 1.5rem 2rem; }
 .note h1 { font-size: 3rem; margin-bottom: 1.5rem; }
@@ -220,7 +215,7 @@ p { margin: 0 0 1rem; }
 
   .wrap { padding: 0 1.1rem; }
   .section { padding: 3.5rem 0; }
-  h1 { font-size: 2.4rem; }
+  h1 { font-size: 2.2rem; }
   .hero h1 { white-space: normal; }
   h2 { font-size: 2rem; margin-bottom: 1.5rem; }
   h3 { font-size: 1.3rem; }
@@ -240,13 +235,13 @@ p { margin: 0 0 1rem; }
   .next-grid { grid-template-columns: 1fr; gap: 1.5rem; }
   .next-photo { max-width: 320px; }
 
-  .tl-item { grid-template-columns: 1fr; margin-bottom: 2.2rem; }
+  .tl-item { grid-template-columns: 1fr; margin-bottom: 2rem; }
   .tl-dot { display: none; }
   .tl-item.left .tl-card,
   .tl-item.right .tl-card { grid-column: 1; grid-row: auto; justify-self: stretch; max-width: none; }
   .timeline::before { display: none; }
-  .tl-card { padding: 1.2rem; }
-  .tl-card .carousel img { height: 200px; }
+  .tl-card { padding: 1rem; }
+  .tl-card .carousel img { height: 180px; }
 
   .split { grid-template-columns: 1fr; gap: 1.5rem; margin: 3rem 0; }
   .split .copy { max-width: none; }
