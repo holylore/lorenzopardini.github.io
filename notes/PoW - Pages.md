@@ -110,8 +110,8 @@ I will be in Taiwan for 6 months (Jan-Jul) working on my own and on my Mandarin.
 EquityAnalyst (a n8n workflow dedicated to financial news and stock analysis) will be my main project (updates coming soon ;). 
 I got anothe couple projects on the way, connect with me on Linkedin to stay updated. 
 
-For the rest I will eat 叫子 (Dumplings) 和茶 (drink Tea) and f**** around. 
-If you want to join me hit me up. 
+For the rest I will eat 胶子 (Dumplings) 喝茶 (drink Tea) and chill around. 
+If you want to join me hit me up ;). 
 
 ## Archive
 Here there is a list of failed experiments which I consider to still be potentially relevant to someone and a potential PoW. 
