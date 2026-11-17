@@ -204,17 +204,27 @@ p { margin: 0 0 1rem; }
    11. MOBILE (860px and narrower)
    ========================================================= */
 @media (max-width: 860px) {
+  html, body { overflow-x: hidden; max-width: 100%; }
   body { padding-top: 96px; }
   html { scroll-padding-top: 7rem; }
 
-  .nav-wrap { height: auto; flex-direction: column; align-items: flex-start; gap: 0.4rem; padding: 0.7rem 1.1rem; }
+  /* One consistent side margin for every section on mobile */
+  .wrap,
+  .hero {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    box-sizing: border-box;
+  }
+  .section { padding: 3.5rem 0; }
+
+  .nav-wrap { height: auto; flex-direction: column; align-items: flex-start; gap: 0.4rem; padding: 0.7rem 1.5rem; }
   .logo { font-size: 1.2rem; }
   .site-header nav { flex-wrap: nowrap; width: 100%; overflow-x: auto; gap: 1.2rem; scrollbar-width: none; }
   .site-header nav::-webkit-scrollbar { display: none; }
   .site-header nav a { white-space: nowrap; font-size: 0.9rem; }
 
-  .wrap { padding: 0 1.1rem; }
-  .section { padding: 3.5rem 0; }
   h1 { font-size: 2.2rem; }
   .hero h1 { white-space: normal; }
   h2 { font-size: 2rem; margin-bottom: 1.5rem; }
@@ -224,21 +234,24 @@ p { margin: 0 0 1rem; }
   .sub-h { margin-top: 2.5rem; font-size: 1.5rem; }
   .intro { margin-bottom: 2rem; font-size: 0.98rem; }
 
-  .hero { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1.1rem 2.5rem; }
-  .hero-img { aspect-ratio: 4 / 3; }
+  .hero { display: block; padding-top: 2rem; padding-bottom: 2.5rem; }
+  .hero > div { margin-bottom: 2rem; }
+  .hero-img { aspect-ratio: 4 / 3; width: 100%; }
   .tagline { font-size: 1rem; margin: 1rem 0 1.5rem; }
 
   .track > .card { flex-basis: 86%; }
   .card { padding: 1.2rem; }
   .card img { aspect-ratio: 4 / 3; }
 
-  .next-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-  .next-photo { max-width: 320px; }
+  /* What comes next: stacked on mobile, photo full width of the column */
+  .next-grid { display: block; }
+  .next-grid > * + * { margin-top: 1.5rem; }
+  .next-photo { width: 100%; max-width: 100%; aspect-ratio: 4 / 3; }
 
   .tl-item { grid-template-columns: 1fr; margin-bottom: 2rem; }
   .tl-dot { display: none; }
   .tl-item.left .tl-card,
-  .tl-item.right .tl-card { grid-column: 1; grid-row: auto; justify-self: stretch; max-width: none; }
+  .tl-item.right .tl-card { grid-column: 1; grid-row: auto; justify-self: stretch; max-width: 100%; }
   .timeline::before { display: none; }
   .tl-card { padding: 1rem; }
   .tl-card .carousel img { height: 180px; }
@@ -248,7 +261,7 @@ p { margin: 0 0 1rem; }
   .split .offset { margin-top: 0; }
   .split.flip .media { order: 0; }
 
-  .pair-block { grid-template-columns: 1fr; gap: 1.5rem; }
+  .pair-block { grid-template-columns: 1fr; gap: 1.5rem; margin: 3rem 0; }
   .pair-right { display: block; }
   .pair-left { grid-row: auto; }
   .pair-right .copy { margin: 0 0 1.5rem; max-width: none; }
@@ -256,7 +269,7 @@ p { margin: 0 0 1rem; }
 
   .cert-list li { padding: 0.7rem 0; }
 
-  .note { padding: 3rem 1.1rem 2rem; }
+  .note { padding: 3rem 1.5rem 2rem; }
   .note h1 { font-size: 2.2rem; }
 
   .footer .wrap { flex-direction: column; align-items: flex-start; }
