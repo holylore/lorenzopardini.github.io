@@ -104,17 +104,15 @@ The goal of this project is pretty simple, finding where I lose the most point a
   
   What I learned: precisely defining rules is crucial for obtaining and effective result, LLMs need precise guideline to understand prompts, results seem to partially contradict my memories (less brilliances that expected, win percentages are slightly different from what I imagined, etc.). 
 
-## Next Steps
-FinanceCopilot will be the main project going forward. I need to integrate the database that has been created into n8n and start testing the "alpha" of the workflow. 
+## What comes next
+I will be in Taiwan for 6 months (Jan-Jul) working on my own and on my Mandarin. 
 
-I will focus part-time on analyzing the results of my Chess.com analysis project to actually improve my chess skills. 
+EquityAnalyst (a n8n workflow dedicated to financial news and stock analysis) will be my main project (updates coming soon ;). 
+I got anothe couple projects on the way, connect with me on Linkedin to stay updated. 
 
-Soon I will resume building FreelanceCopilot focusing on freelance gigs and remote jobs. 
+For the rest I will eat 叫子 (Dumplings) 和茶 (drink Tea) and f**** around. 
+If you want to join me hit me up. 
 
-As I already did I want to continue supporting my girlfriend building a better stack to make her work easier and save her time. 
-This will be a primary focus especially since January when we will go together to Taiwan (her home country). 
-
-If you will be in Taiwan from January to July feel free to reach out :)
 ## Archive
 Here there is a list of failed experiments which I consider to still be potentially relevant to someone and a potential PoW. 
 
@@ -132,7 +130,3 @@ The goal was to automate the first layer of research for companies and uncover p
   
   What I learned: build for a real purpose not based on feeling or you will get poor results or no results. 
 
-## Infrastructure 
-n8n running locally on my laptop via Docker. I use AI via OpenWebUI (running local models via Ollama or using free tier API keys such as OpenRouter API key) or leveraging Claude. 
-
-n8n is exposed via an ngrok tunnel that grants permanent access. 
