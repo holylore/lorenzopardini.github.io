@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,26 +7,45 @@
   <meta name="description" content="Lorenzo Pardini: data and automation for operations and finance teams. Remote, EU-based.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.remove('no-js'); document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-<main class="page">
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top">Lorenzo Pardini</a>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#certificates">Certificates</a>
+      <a href="#next">What's next</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
 
-  <header class="intro">
-    <img class="portrait" src="images/About_Image.jpeg" alt="Lorenzo Pardini in Copenhagen">
-    <h1>I turn manual work into systems that run without me.</h1>
-    <p class="lead">Data and automation for operations and finance teams. Remote, EU-based. BSc Business Administration @UniPi, IFC @Fontys.</p>
-    <p class="muted">I'm curious by default. I learn new tools fast and ask the boring questions first, usually the ones that save someone three hours a week.</p>
-    <p class="links">
-      <a href="mailto:lrnzprd@gmail.com">lrnzprd@gmail.com</a>
-      <a href="https://www.linkedin.com/in/lorenzopardini">LinkedIn</a>
-      <a href="https://github.com/holylore">GitHub</a>
-    </p>
-  </header>
+<main class="page" id="top">
 
-  <section class="block">
+  <section class="hero">
+    <div class="hero-text">
+      <h1 class="rise r1">I turn manual work into systems that run without me.</h1>
+      <p class="lead rise r2">Data and automation for operations and finance teams. Remote, EU-based. BSc Business Administration @UniPi, IFC @Fontys.</p>
+      <p class="muted rise r3">I'm curious by default. I learn new tools fast and ask the boring questions first, usually the ones that save someone three hours a week.</p>
+      <p class="links rise r4">
+        <a href="mailto:lrnzprd@gmail.com">lrnzprd@gmail.com</a>
+        <a href="https://www.linkedin.com/in/lorenzopardini">LinkedIn</a>
+        <a href="https://github.com/holylore">GitHub</a>
+      </p>
+    </div>
+    <figure class="portrait-wrap">
+      <img class="portrait" src="images/About_Image.jpeg" alt="Lorenzo Pardini in Copenhagen">
+    </figure>
+  </section>
+
+  <section class="block" id="what">
     <h2>What I do</h2>
     <div class="content">
       <p><strong>Clean and model data.</strong> <span class="muted">Messy exports become tables you can trust, with the logic written down.</span></p>
@@ -35,41 +54,35 @@
     </div>
   </section>
 
-  <section class="block">
+  <section class="block" id="projects">
     <h2>Projects</h2>
     <div class="content">
 
       <article class="project">
         <h3>Pei Attention</h3>
-        <div>
-          <p class="muted">A semi-automated Notion CRM powered by n8n. Pei texts a bot on Telegram, and n8n does the rest.</p>
-          <p class="muted">After the numbers are logged, Notion processes them in related databases. They track 23 students and their classes, from 4 to 20 per month. Each lesson keeps its notes. A dedicated income tracker shows earnings by month and platform. A historical price table lets Pei change each client's rate as needed.</p>
-          <p class="muted">The biggest gain is ease of use. Pei finds it much simpler to stay organized than manual entry. She estimates that logging a lesson went from about 3 minutes to about 30 seconds.</p>
-        </div>
+        <p class="muted">A semi-automated Notion CRM powered by n8n. Pei texts a bot on Telegram, and n8n does the rest.</p>
+        <p class="muted">After the numbers are logged, Notion processes them in related databases. They track 23 students and their classes, from 4 to 20 per month. Each lesson keeps its notes. A dedicated income tracker shows earnings by month and platform. A historical price table lets Pei change each client's rate as needed.</p>
+        <p class="muted">The biggest gain is ease of use. Pei finds it much simpler to stay organized than manual entry. She estimates that logging a lesson went from about 3 minutes to about 30 seconds.</p>
       </article>
 
       <article class="project">
         <h3>All-Weather Optimizer</h3>
-        <div>
-          <p class="muted">A full analysis of my personal portfolio. It tracks Sharpe ratios, the Markowitz efficient frontier, a correlation matrix, performance against the main indexes, and a bootstrap confidence interval.</p>
-          <p class="muted">Built with Jupyter Notebook, Claude, and Python.</p>
-        </div>
+        <p class="muted">A full analysis of my personal portfolio. It tracks Sharpe ratios, the Markowitz efficient frontier, a correlation matrix, performance against the main indexes, and a bootstrap confidence interval.</p>
+        <p class="muted">Built with Jupyter Notebook, Claude, and Python.</p>
       </article>
 
       <article class="project">
         <h3>DailyBriefing</h3>
-        <div>
-          <p class="muted">My daily source of information: three n8n workflows that keep me posted on each industry I follow. Together they save me about 1.5 hours a day, since I no longer scroll for news.</p>
-          <p class="muted"><strong>DailyDigest</strong> covers general news, geopolitics, and economic news.</p>
-          <p class="muted"><strong>DailyTech</strong> covers developments in the tech world, my top companies, and useful tips and features.</p>
-          <p class="muted"><strong>DailyFinance</strong> has two branches. The first covers daily market stories and everything about the companies I own. The second is a personal financial assistant that checks the status and core metrics of my holdings and watchlist.</p>
-        </div>
+        <p class="muted">My daily source of information: three n8n workflows that keep me posted on each industry I follow. Together they save me about 1.5 hours a day, since I no longer scroll for news.</p>
+        <p class="muted"><strong>DailyDigest</strong> covers general news, geopolitics, and economic news.</p>
+        <p class="muted"><strong>DailyTech</strong> covers developments in the tech world, my top companies, and useful tips and features.</p>
+        <p class="muted"><strong>DailyFinance</strong> has two branches. The first covers daily market stories and everything about the companies I own. The second is a personal financial assistant that checks the status and core metrics of my holdings and watchlist.</p>
       </article>
 
     </div>
   </section>
 
-  <section class="block">
+  <section class="block" id="experience">
     <h2>Experience</h2>
     <ul class="list">
       <li><strong>Commis di Sala</strong>, four seasons across three places: Lido di Camaiore (2022 to 2023), Viareggio (2024), and Forte dei Marmi (2026). Large events up to 500 guests and international guests in high-end hospitality, from beach service to five-star standards.</li>
@@ -77,7 +90,7 @@
     </ul>
   </section>
 
-  <section class="block">
+  <section class="block" id="education">
     <h2>Education</h2>
     <ul class="list">
       <li><strong>BSc Business Administration</strong>, University of Pisa (UniPi), Nov 2026. Macroeconomics, statistics, marketing, corporate finance.</li>
@@ -85,7 +98,7 @@
     </ul>
   </section>
 
-  <section class="block">
+  <section class="block" id="certificates">
     <h2>Certificates</h2>
     <ul class="list">
       <li><strong>IELTS Academic, C1 (overall 8.0)</strong>, British Council, Oct 2026. <a href="https://ielts.org/verify">Verify</a></li>
@@ -94,7 +107,7 @@
     </ul>
   </section>
 
-  <section class="block">
+  <section class="block" id="next">
     <h2>What's next</h2>
     <ul class="list">
       <li><strong>Six months in Taiwan, studying Mandarin.</strong> Learning the language and working on my own projects from there.</li>
@@ -102,7 +115,7 @@
     </ul>
   </section>
 
-  <section class="block contact">
+  <section class="block contact" id="contact">
     <h2>Contact</h2>
     <div class="content">
       <p class="muted">If your team has a process that takes hours every week, send me the process. I'll reply within two days with whether I can automate it.</p>
@@ -114,6 +127,44 @@
   </section>
 
 </main>
+
+<script>
+  // Highlight the tab for the section in view
+  (function () {
+    var tabs = document.querySelectorAll('.tabs a');
+    var sections = Array.prototype.map.call(tabs, function (a) {
+      return document.querySelector(a.getAttribute('href'));
+    });
+
+    if ('IntersectionObserver' in window) {
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          tabs.forEach(function (t) { t.classList.remove('active'); });
+          var i = sections.indexOf(entry.target);
+          if (i > -1) tabs[i].classList.add('active');
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      sections.forEach(function (s) { if (s) spy.observe(s); });
+    }
+
+    // Reveal blocks as they scroll into view
+    var blocks = document.querySelectorAll('.block');
+    if ('IntersectionObserver' in window) {
+      var reveal = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            reveal.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      blocks.forEach(function (b) { reveal.observe(b); });
+    } else {
+      blocks.forEach(function (b) { b.classList.add('in'); });
+    }
+  })();
+</script>
 
 </body>
 </html>
