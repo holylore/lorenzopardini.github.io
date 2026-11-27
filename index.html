@@ -12,11 +12,11 @@
     /* Palette: Pantone 12-0812 TCX Alabaster Gleam (background),
        18-0622 TCX Olive Drab (main text), 18-1411 TCX Plum Wine (details) */
     :root {
-      --alabaster: #F3E3C4;   /* Alabaster Gleam: background */
-      --alabaster-deep: #E9D6AE; /* darker tint of Alabaster: project cards */
-      --olive: #5F5F36;       /* Olive Drab: main text and headings */
-      --olive-soft: #6E6E45;  /* Olive Drab, lighter: secondary text */
-      --plum: #6A4A5A;        /* Plum Wine: links, accents, details */
+      --alabaster: #F3E3C4;
+      --alabaster-deep: #E9D6AE;
+      --olive: #5F5F36;
+      --olive-soft: #4A4A2A;
+      --plum: #6A4A5A;
       --line: rgba(106, 74, 90, 0.22);
       --serif: 'IBM Plex Serif', Georgia, serif;
       --sans: 'IBM Plex Sans', system-ui, sans-serif;
@@ -164,7 +164,17 @@
     }
 
     /* ---------- Sections ---------- */
-    h2 { font-size: 1.35rem; color: var(--olive); }
+    h2 { font-size: 1.35rem; color: var(--olive); position: relative; }
+    h2::after {
+      content: "";
+      display: block;
+      width: 28px;
+      height: 2px;
+      background: var(--plum);
+      margin-top: 0.7rem;
+      transition: width 0.5s ease;
+    }
+    .block:hover h2::after { width: 56px; }
     h3 { font-size: 1.15rem; color: var(--olive); margin-bottom: 0.6rem; }
 
     .block {
@@ -192,12 +202,42 @@
     }
     .project p { font-size: 0.97rem; }
 
+    /* Secondary sections: plum marker and hover bar on each entry */
     .list { list-style: none; margin: 0; padding: 0; font-size: 0.97rem; }
     .list li {
-      padding: 0.9rem 0;
+      position: relative;
+      padding: 0.9rem 0 0.9rem 1.4rem;
       border-top: 1px solid var(--line);
+      transition: padding-left 0.35s ease;
     }
-    .list li:first-child { border-top: 0; padding-top: 0; }
+    .list li:first-child { border-top: 0; padding-top: 0.2rem; }
+    .list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 1.35rem;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--plum);
+      transition: transform 0.35s ease, background 0.35s ease;
+    }
+    .list li:first-child::before { top: 0.45rem; }
+    .list li::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--plum);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .list li:hover { padding-left: 1.7rem; }
+    .list li:hover::before { transform: scale(1.5); background: var(--olive); }
+    .list li:hover::after { transform: scaleY(1); }
 
     .contact .muted { font-size: 1.05rem; max-width: 56ch; }
 
@@ -229,6 +269,18 @@
       transform: none;
     }
 
+    /* Entries rise in one after another when their section appears */
+    .js .list li {
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), padding-left 0.35s ease;
+    }
+    .js .block.in .list li { opacity: 1; transform: none; }
+    .js .block.in .list li:nth-child(1) { transition-delay: 0.10s; }
+    .js .block.in .list li:nth-child(2) { transition-delay: 0.19s; }
+    .js .block.in .list li:nth-child(3) { transition-delay: 0.28s; }
+    .js .block.in .list li:nth-child(4) { transition-delay: 0.37s; }
+
     @keyframes rise {
       to { opacity: 1; transform: none; }
     }
@@ -247,7 +299,8 @@
         animation: none !important;
         transition: none !important;
       }
-      .js .block { opacity: 1; transform: none; }
+      .js .block,
+      .js .list li { opacity: 1; transform: none; }
     }
 
     /* ---------- Mobile ---------- */
